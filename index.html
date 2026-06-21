@@ -125,12 +125,24 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
+        }
+        /* Video background (covers hero) */
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            pointer-events: none;
         }
         .hero::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.18);
             z-index: 1;
         }
         .hero-content {
@@ -139,6 +151,73 @@
             text-align: center;
             z-index: 2;
             padding: 0 20px;
+        }
+        .hero-content .invite-small {
+            font-family: 'Playfair Display', var(--font-serif);
+            font-size: 1.6rem;
+            color: #ffffff;
+            letter-spacing: 2px;
+            margin-bottom: 18px;
+            font-weight: 400;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.45);
+        }
+        .hero-content .invite-names {
+            font-family: 'Alex Brush', var(--font-cursive-sub);
+            font-size: 3.6rem;
+            color: #ffffff;
+            margin: 6px 0 14px 0;
+            line-height: 1.05;
+            font-weight: 500;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+        .hero-content .invite-date .date-top {
+            font-family: 'Playfair Display', var(--font-serif);
+            font-size: 6rem;
+            color: #ffffff;
+            line-height: 0.95;
+            margin: 6px 0 0 0;
+            font-weight: 400;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.45);
+        }
+        .hero-content .invite-date .date-year {
+            font-family: 'Playfair Display', var(--font-serif);
+            font-size: 3rem;
+            color: #ffffff;
+            margin-top: 6px;
+            letter-spacing: 2px;
+            font-weight: 400;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.45);
+        }
+        .hero-video-btn {
+            position: absolute;
+            z-index: 3;
+            right: 22px;
+            bottom: 22px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0,0,0,0.48);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+        }
+        .hero-video-btn.hidden { display: none; }
+        /* show mobile-invite only on small screens */
+        .mobile-invite { display: none; }
+        .desktop-invite { display: block; }
+
+        @media (max-width: 768px) {
+            .mobile-invite { display: block; }
+            .desktop-invite { display: none; }
+            .hero-content .invite-names { font-size: 2.6rem; }
+            .hero-content .date-top { font-size: 3.8rem; }
+            .hero-content .date-year { font-size: 2rem; }
+            /* previously hid video on smaller screens; now allow video on mobile */
         }
         .hero-content p {
             letter-spacing: 8px;
@@ -500,6 +579,33 @@
             font-weight: 600;
         }
 
+        .invitation-card {
+            border: 24px solid transparent;
+            border-image-source: var(--invitation-border-image, url('invitation-border.png'));
+            border-image-slice: 30 fill;
+            border-image-width: 24px;
+            border-image-outset: 0;
+            border-image-repeat: stretch;
+            border-radius: 30px;
+            box-sizing: border-box;
+        }
+
+        .invitation-couple-name {
+            font-family: var(--font-cursive-title), var(--font-cursive-sub), cursive;
+            font-size: 3rem;
+            color: var(--primary-dark);
+            line-height: 1.05;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .invitation-couple-name span {
+            display: block;
+            margin: 0.3em 0;
+        }
+
         /* Top Button */
         #topBtn { 
             position: fixed;
@@ -681,14 +787,38 @@
             .countdown-item { width: 75px; height: 85px; }
             .countdown-item span { font-size: 1.6rem; }
             .couple-name-main { font-size: 2.6rem; }
+            .invitation-couple-name { font-size: 2.2rem !important; white-space: nowrap !important; }
+            
+            /* Invitation card responsive */
+            .invitation-card {
+                padding: 40px 25px !important;
+                border-radius: 20px !important;
+            }
+            .invitation-card > .invitation-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 20px !important;
+            }
+            
             .couple-section .row.justify-content-center > [class*="col-"] {
-                flex: 0 0 calc(50% - 12px);
-                max-width: calc(50% - 12px);
-                width: calc(50% - 12px);
+                flex: 0 0 100% !important;
+                max-width: 100% !important;
+                width: 100% !important;
             }
             .couple-section .row.justify-content-center {
                 gap: 16px;
-                justify-content: space-between;
+                justify-content: center;
+            }
+            .couple-section .col-lg-8,
+            .couple-section .col-md-10 {
+                width: 100% !important;
+                max-width: none !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+            .couple-section .container {
+                max-width: none !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
             }
             .couple-section .parents-info,
             .couple-section .couple-card {
@@ -700,6 +830,161 @@
             .couple-section .couple-card {
                 padding: 18px 12px;
             }
+        }
+
+        /* Extra small devices adjustments (phones) */
+        @media (max-width: 480px) {
+            html { font-size: 14px; }
+            body { line-height: 1.45; }
+
+            /* Hero */
+            .hero { padding: 20px 10px; background-position: center top; }
+            .hero-content { padding: 0 8px; }
+            .desktop-invite { display: none; }
+            .mobile-invite { display: block; }
+            .hero-content .invite-small { font-size: 1.1rem; margin-bottom: 10px; }
+            .hero-content .invite-names { font-size: 2.4rem; margin-bottom: 8px; }
+            .hero-content .date-top { font-size: 3.2rem; }
+            .hero-content .date-year { font-size: 1.6rem; }
+
+            /* Gallery */
+            .gallery-grid { columns: 1; gap: 10px; }
+            .gallery-grid img { border-radius: 6px; }
+
+            /* Couple cards */
+            .couple-name-main { font-size: 1.8rem; }
+            .couple-img-container { border-radius: 10px; }
+            .couple-section .container,
+            .couple-section .row.justify-content-center,
+            .couple-section .col-lg-8,
+            .couple-section .col-md-10 {
+                width: 100% !important;
+                max-width: none !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+            
+            /* Invitation card mobile - NHỎ GỌN GIỐNG ẢNH */
+            .invitation-card {
+                padding: 32px 24px !important;
+                border-radius: 26px !important;
+                margin: 20px auto !important;
+                max-width: none !important;
+                width: 100% !important;
+                border: 24px solid transparent !important;
+                border-image-source: var(--invitation-border-image, url('invitation-border.png')) !important;
+                border-image-slice: 30 fill !important;
+                border-image-width: 24px !important;
+                border-image-outset: 0 !important;
+                border-image-repeat: stretch !important;
+                min-width: 0 !important;
+                box-sizing: border-box !important;
+            }
+            .invitation-couple-name { font-size: 1.8rem !important; }
+            .invitation-couple-name span { display: block !important; margin: 0.3em 0 !important; }
+            
+            /* Giữ hoa góc trên trái, ẩn góc dưới phải */
+            .invitation-card > div[style*="position: absolute"]:first-of-type {
+                display: block !important;
+                top: 8px !important;
+                left: 10px !important;
+                font-size: 3rem !important;
+                opacity: 0.22 !important;
+            }
+            .invitation-card > div[style*="position: absolute"]:last-of-type {
+                display: none !important;
+            }
+            
+            /* 2 cột nhà trai/gái trên mobile */
+            .invitation-card > .invitation-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 14px !important;
+                margin-bottom: 18px !important;
+                min-width: 0 !important;
+            }
+            
+            .invitation-card > .invitation-grid > .invitation-grid-column {
+                padding: 0;
+                width: 100% !important;
+                text-align: center !important;
+            }
+            
+            /* NHÀ TRAI / NHÀ GÁI title */
+            .invitation-card > div[style*="grid-template-columns"] > div > div:first-child {
+                font-size: 0.95rem !important;
+                margin-bottom: 6px !important;
+                letter-spacing: 2px;
+                font-weight: 700 !important;
+                color: var(--accent-gold) !important;
+            }
+            
+            /* Tên gia đình */
+            .invitation-card > div[style*="grid-template-columns"] > div > div:last-child {
+                font-size: 0.8rem !important;
+                line-height: 1.75;
+                font-weight: 500;
+                color: #555;
+            }
+            
+            /* Đường kẻ giữa */
+            .invitation-card > div[style*="height: 1px"] {
+                margin: 20px 0 !important;
+            }
+            
+            /* Trung tâm - Tên cô dâu chú rể */
+            .invitation-card > div[style*="margin: 40px"] {
+                margin: 18px 0 !important;
+            }
+            
+            /* "Trân trọng báo tin..." */
+            .invitation-card > div[style*="margin: 40px"] > div:first-child {
+                font-size: 0.7rem !important;
+                margin-bottom: 10px !important;
+                letter-spacing: 1.5px;
+                color: #999;
+                font-weight: 500;
+            }
+            
+            /* Tên Bé Nhõ & Nhựt Huỳnh */
+            .invitation-card > div[style*="margin: 40px"] > .invitation-couple-name {
+                font-size: 2.5rem !important;
+                margin-bottom: 10px !important;
+                font-weight: 400 !important;
+                letter-spacing: 0.02em !important;
+                color: var(--primary-dark) !important;
+                line-height: 1.1 !important;
+            }
+            
+            /* Địa chỉ dưới */
+            .invitation-card > div[style*="margin: 40px"] > div:last-child {
+                font-size: 0.7rem !important;
+                margin-top: 10px !important;
+                line-height: 1.5;
+                color: #aaa;
+            }
+
+            /* Countdown */
+            .countdown-box { gap: 10px; }
+            .countdown-item { width: 64px; height: 74px; }
+            .countdown-item span { font-size: 1.4rem; }
+
+            /* Calendar */
+            .wedding-calendar { padding: 20px 14px; max-width: 100%; }
+            .calendar-days-grid { gap: 8px; font-size: 0.8rem; }
+
+            /* Map */
+            .map-wrapper iframe { height: 280px; }
+
+            /* Modal */
+            .modal-content-box { padding: 20px; max-width: 95%; }
+
+            /* Music widget smaller */
+            .music-widget { right: 12px; bottom: 12px; padding: 6px 8px; }
+            .music-widget button { width: 34px; height: 34px; }
+
+            /* Text sizes and spacing adjustments */
+            .section-padding { padding: 60px 12px; }
+            .section-title { margin-bottom: 28px; }
         }
     </style>
 </head>
@@ -741,79 +1026,228 @@
     </div>
 </div>
 
-<!-- Nút Cuộn nhanh lên đầu trang -->
-<button id="topBtn">↑</button>
-
 <!-- Hero Banner Mở đầu -->
 <section class="hero" id="hero-section">
+    <!-- Video background (place your video file 'background.mp4' in the same folder or change the src) -->
+    <video id="heroVideo" class="hero-video" autoplay muted loop playsinline poster="Ảnh cô dâu chú rể.jpg">
+        <source src="background.mp4" type="video/mp4">
+        <!-- Fallback text -->
+    </video>
+    <button id="heroVideoBtn" class="hero-video-btn" aria-label="Play video">▶</button>
     <div class="hero-content" data-aos="fade-up" data-aos-duration="1800">
-        <p>Wedding Invitation</p>
-        <h1>Bé Nhõ<br>& <br> Nhựt Huỳnh</h1>
-        <p class="mb-0" style="font-size: 1.3rem; letter-spacing: 4px; color: #fceecb;">7-8 . 11 . 2026</p>
+        <!-- Desktop version (keeps original layout) -->
+        <div class="desktop-invite">
+            <p>Wedding Invitation</p>
+            <h1>Bé Nhõ<br>& <br> Nhựt Huỳnh</h1>
+            <p class="mb-0" style="font-size: 1.3rem; letter-spacing: 4px; color: #fceecb;">24&25 . 06 . 2026</p>
+        </div>
+
+        <!-- Mobile-only stylized version -->
+        <div class="mobile-invite">
+            <p class="invite-small">Thư Mời Cưới</p>
+            <h1 class="invite-names">Bé Nhõ &amp; Nhựt Huỳnh</h1>
+            <div class="invite-date">
+                <div class="date-top">24&25.06</div>
+                <div class="date-year">2026</div>
+            </div>
+        </div>
     </div>
 </section>
 
 <!-- Lời ngỏ/ Giới thiệu thiệp -->
-<section class="section-padding text-center" id="invitation-section">
+<section class="text-center" id="invitation-section" style="padding: 40px 20px;">
     <div class="section-title" data-aos="fade-up">
         <h2>Lời Ngỏ</h2>
         <div class="line"></div>
     </div>
-    <div class="container" data-aos="fade-up" style="max-width: 700px; line-height: 2.2; color: #555; font-size: 1.05rem;">
+    <div class="container" data-aos="fade-up" style="max-width: 800px; line-height: 2.2; color: #555; font-size: 0.95rem; white-space: normal; word-break: normal; overflow-wrap: normal;">
         "Tình yêu bước vào đời sống của chúng ta tựa như một phép màu. Nó gắn kết hai tâm hồn xa lạ xích lại gần nhau hơn, hòa chung một nhịp đập."<br>
         Chúng tôi rất hân hạnh được đón tiếp quý khách đến tham dự, chung vui và chia sẻ khoảnh khắc hạnh phúc trọn vẹn tại lễ thành hôn của chúng tôi.
     </div>
 </section>
 
 <!-- Thông tin Gia đình & Cặp đôi -->
-<section class="section-padding couple-section">
+<section class="couple-section" style="padding: 30px 20px;">
 <div class="container">
-    <!-- Đại diện hai bên gia đình -->
-    <div class="row justify-content-center text-center g-5 mb-4">
-        <div class="col-md-5 parents-info" data-aos="fade-right">
-            <div class="parents-title">Nhà Gái</div>
-            <div class="parents-name">Ông Trương Văn Út</div>
-            <div class="parents-name">Bà Tô Ấp Lăng</div>
-            <div class="parents-address"><i class="small">Ấp Cá Rô, xã Vĩnh Mỹ, Tỉnh Bạc Liêu</i></div>
-        </div>
-        <div class="col-md-5 parents-info" data-aos="fade-left">
-            <div class="parents-title">Nhà Trai</div>
-            <div class="parents-name">Ông PHẠM GIA LONG</div>
-            <div class="parents-name">Bà NGUYỄN THỊ NGỌC HẠNH</div>
-            <div class="parents-address"><i class="small">Quận 8, TP. Hồ Chí Minh</i></div>
-        </div>
-    </div>
+    <!-- Card Thiệp Truyền Thống -->
+    <div class="row justify-content-center" data-aos="fade-up">
+        <div class="col-lg-8 col-md-10">
+            <!-- Thay ảnh viền border tại --invitation-border-image -->
+            <div class="invitation-card" style="
+                --invitation-border-image: url('ảnh viền.avif');
+                border-radius: 30px;
+                padding: 30px 25px;
+                background: linear-gradient(135deg, rgba(252, 248, 241, 0.8) 0%, rgba(255, 255, 255, 0.95) 100%);
+                text-align: center;
+                box-shadow: 0 20px 50px rgba(197, 168, 106, 0.15);
+                position: relative;
+            ">
+                <!-- Decorative corner elements -->
+                <div style="position: absolute; top: -15px; left: -15px; font-size: 4rem; opacity: 0.15;">✿</div>
+                <div style="position: absolute; bottom: -15px; right: -15px; font-size: 4rem; opacity: 0.15;">✿</div>
 
-    <div class="text-center heart-divider" data-aos="zoom-in">
-        <img class="heart-image" src="traitim1.jpg" alt="Trái tim vẽ tay">
-    </div>
+                <!-- Thông tin gia đình - Hàng trên -->
+                <div class="invitation-grid" style="display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 20px; margin-bottom: 25px; width: 100%;">
+                    <!-- Nhà Trai -->
+                    <div class="invitation-grid-column" data-aos="fade-right" data-aos-delay="100">
+                        <div style="
+                            font-size: 1.3rem;
+                            color: var(--accent-gold);
+                            font-weight: 700;
+                            letter-spacing: 3px;
+                            margin-bottom: 15px;
+                            text-transform: uppercase;
+                        ">NHÀ TRAI</div>
+                        <div style="
+                            font-size: 0.85rem;
+                            color: #555;
+                            line-height: 2;
+                            font-weight: 500;
+                            white-space: nowrap;
+                            text-align: left;
+                            padding-left: 10px;
+                        ">
+                            Ông Dư Thanh Nguyễn<br>
+                            Bà Nguyễn Kiều Diễm
+                        </div>
+                    </div>
 
-    <!-- Chân dung Cô dâu & Chú rể -->
-    <div class="row justify-content-center align-items-center g-4">
-        <div class="col-lg-5 col-md-6" data-aos="fade-right">
-            <div class="couple-card text-center">
-                <div class="couple-name-title">Cô Dâu</div>
-                <h2 class="couple-name-main">Bé <br> Nhõ</h2>
-                <div class="couple-img-container">
-                    <img src="anh co dau.jpg" class="couple-single-img" alt="Cô Dâu Bé Nhõ">
+                    <!-- Nhà Gái -->
+                    <div class="invitation-grid-column" data-aos="fade-left" data-aos-delay="100">
+                        <div style="
+                            font-size: 1.3rem;
+                            color: var(--accent-gold);
+                            font-weight: 700;
+                            letter-spacing: 3px;
+                            margin-bottom: 15px;
+                            text-transform: uppercase;
+                        ">NHÀ GÁI</div>
+                        <div style="
+                            font-size: 0.85rem;
+                            color: #555;
+                            line-height: 2;
+                            font-weight: 500;
+                            white-space: nowrap;
+                            text-align: left;
+                            padding-left: 27px;
+                        ">
+                            Ông Trương Văn Út<br>
+                            Bà Tô Ấp Lăng
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div style="
+                    height: 1px;
+                    background: linear-gradient(to right, transparent, var(--accent-gold), transparent);
+                    margin: 30px 0;
+                "></div>
+
+                <!-- Thông tin cô dâu & chú rể - Trung tâm -->
+                <div style="margin: 40px 0;" data-aos="zoom-in" data-aos-delay="200">
+                    <div style="
+                        font-size: 0.75rem;
+                        color: #999;
+                        letter-spacing: 1px;
+                        margin-bottom: 20px;
+                        text-transform: uppercase;
+                        font-weight: 500;
+                        white-space: nowrap;
+                    ">Trân Trọng Báo Tin Lễ Thành Hôn Của</div>
+
+                    <div class="invitation-couple-name">
+                        <span>Dư Nhựt Huỳnh</span>
+                        <span>&</span>
+                        <span>Trương Thị Bé Nhõ</span>
+                    </div>
+
+                    <div style="
+                        font-size: 0.85rem;
+                        color: #aaa;
+                        letter-spacing: 1px;
+                        margin-top: 20px;
+                    ">
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-5 col-md-6" data-aos="fade-left">
-            <div class="couple-card text-center">
-                <div class="couple-name-title">Chú Rể</div>
-                <h2 class="couple-name-main">Nhựt <br> Huỳnh</h2>
-                <div class="couple-img-container">
-                    <img src="anh chu re.jpg" class="couple-single-img" alt="Chú Rể Nhựt Huỳnh">
-                </div>
-            </div>
+    </div>
+
+    <!-- Wedding Invitation Details -->
+    <!-- Thay đổi ảnh nền ở đây: sửa đường dẫn trong background-image -->
+    <div style="margin-top: 20px; text-align: center; background: linear-gradient(135deg, rgba(255,249,240,0.95) 0%, rgba(255,255,255,0.95) 100%), url('hoasen.jpg'); background-size: cover; background-position: center; padding: 30px 20px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.08);">
+        <!-- Full-width Bride Photo -->
+        <!-- Thay đổi ảnh cô dâu ở đây: sửa đường dẫn trong src -->
+        <div style="position: relative; width: 100%; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); margin-bottom: -30px;" data-aos="fade-up" data-aos-delay="100">
+            <img src="co-dau-chu-re-chibi-02.webp" alt="Cô Dâu" style="width: 100%; height: 400px; object-fit: cover;">
+            
+            <!-- Blur Overlay at Bottom -->
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 150px; background: linear-gradient(to top, rgba(255,255,255,0.95), rgba(255,255,255,0.5), transparent); pointer-events: none;"></div>
+        </div>
+        
+        <!-- Text Section Below Photo -->
+        <div style="font-size: 1.2rem; color: #555; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; position: relative; z-index: 1;" data-aos="fade-up" data-aos-delay="200">THƯ MỜI THAM DỰ TIỆC CƯỚI</div>
+        <div style="font-size: 1.5rem; color: var(--accent-gold); font-weight: 600; margin-bottom: 15px;" data-aos="fade-up" data-aos-delay="250">TIỆC MỪNG LỄ THÀNH HÔN</div>
+        <div style="font-size: 1.1rem; color: #333; margin-bottom: 5px;" data-aos="fade-up" data-aos-delay="300">10:00 - Chủ nhật</div>
+        <div style="font-size: 1.4rem; color: #333; margin-bottom: 5px; font-weight: bold; letter-spacing: 3px;" data-aos="fade-up" data-aos-delay="350">08 . 11 . 2026</div>
+        <div style="font-size: 1rem; color: #888; margin-bottom: 10px; font-weight: bold; letter-spacing: 1px;" data-aos="fade-up" data-aos-delay="400">(Tức Ngày 30 Tháng 9 Năm Bính Ngọ)</div>
+        <div style="font-size: 1.1rem; color: #333; margin-bottom: 5px;" data-aos="fade-up" data-aos-delay="450">Tại Tư Gia Nhà Trai</div>
+        <div style="font-size: 1rem; color: #666; margin-bottom: 15px;" data-aos="fade-up" data-aos-delay="500">Ấp 2, U Minh, Cà Mau</div>
+        <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; margin-bottom: 10px;" data-aos="fade-up" data-aos-delay="550">
+            <button onclick="showCelebration()" style="background: white; color: #333; border: 2px solid #333; padding: 6px 15px; font-size: 0.8rem; font-weight: bold; border-radius: 18px; cursor: pointer; transition: all 0.3s; width: 200px; transform: scale(1);" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">XÁC NHẬN THAM DỰ</button>
+            <button onclick="showQRModal()" style="background: white; color: #333; border: 2px solid #333; padding: 6px 15px; font-size: 0.8rem; font-weight: bold; border-radius: 18px; cursor: pointer; transition: all 0.3s; width: 180px; transform: scale(1);" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">GỬI MỪNG CƯỚI</button>
+        </div>
+        
+        <!-- Xem Chỉ Đường Button -->
+        <div style="text-align: center; margin-bottom: 5px;" data-aos="fade-up" data-aos-delay="600">
+            <button onclick="window.open('https://www.google.com/maps?q=9.346606,105.624207', '_blank')" style="background: #1a5f2a; color: white; border: 2px solid #1a5f2a; padding: 6px 15px; font-size: 0.8rem; font-weight: bold; border-radius: 18px; cursor: pointer; transition: all 0.3s; width: 160px;">Xem Chỉ Đường</button>
+        </div>
+        
+        <!-- Google Maps -->
+        <div style="border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);" data-aos="zoom-in" data-aos-delay="650">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d1704.4301724060972!2d105.624207!3d9.346606!3m2!1i1024!2i768!4f13.1!5e1!3m2!1svi!2sus!4v1781786323276!5m2!1svi!2sus" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+
+    <div style="margin-top: 0; text-align: center; background: linear-gradient(135deg, rgba(255,249,240,0.95) 0%, rgba(255,255,255,0.95) 100%), url('hoasen.jpg'); background-size: cover; background-position: center; padding: 0; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.08);">
+        <!-- Full-width Bride Photo -->
+        <!-- Thay đổi ảnh cô dâu ở đây: sửa đường dẫn trong src -->
+        <div style="position: relative; width: 100%; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); margin-bottom: -30px;" data-aos="fade-up" data-aos-delay="100">
+            <img src="anhcodauchure2.webp" alt="Cô Dâu" style="width: 100%; height: 400px; object-fit: cover;">
+            
+            <!-- Blur Overlay at Bottom -->
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 150px; background: linear-gradient(to top, rgba(255,255,255,0.95), rgba(255,255,255,0.5), transparent); pointer-events: none;"></div>
+        </div>
+        
+        <!-- Text Section Below Photo -->
+        <div style="font-size: 1.2rem; color: #555; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; position: relative; z-index: 1;" data-aos="fade-up" data-aos-delay="200">THƯ MỜI THAM DỰ TIỆC CƯỚI</div>
+        <div style="font-size: 1.5rem; color: var(--accent-gold); font-weight: 600; margin-bottom: 15px;" data-aos="fade-up" data-aos-delay="250">TIỆC MỪNG LỄ VU QUY</div>
+        <div style="font-size: 1.1rem; color: #333; margin-bottom: 5px;" data-aos="fade-up" data-aos-delay="300">10:00 - Thứ Bảy</div>
+        <div style="font-size: 1.4rem; color: #333; margin-bottom: 5px; font-weight: bold; letter-spacing: 3px;" data-aos="fade-up" data-aos-delay="350">07 . 11 . 2026</div>
+        <div style="font-size: 1rem; color: #888; margin-bottom: 10px; font-weight: bold; letter-spacing: 1px;" data-aos="fade-up" data-aos-delay="400">(Tức Ngày 29 Tháng 9 Năm Bính Ngọ)</div>
+        <div style="font-size: 1.1rem; color: #333; margin-bottom: 5px;" data-aos="fade-up" data-aos-delay="450">Tại Tư Gia Nhà Gái</div>
+        <div style="font-size: 1rem; color: #666; margin-bottom: 15px;" data-aos="fade-up" data-aos-delay="500">Ấp Cá Rô, Vĩnh Mỹ, Cà Mau</div>
+        <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; margin-bottom: 10px;" data-aos="fade-up" data-aos-delay="550">
+            <button onclick="showCelebration()" style="background: white; color: #333; border: 2px solid #333; padding: 6px 15px; font-size: 0.8rem; font-weight: bold; border-radius: 18px; cursor: pointer; transition: all 0.3s; width: 200px; transform: scale(1);" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">XÁC NHẬN THAM DỰ</button>
+            <button onclick="showQRModal2()" style="background: white; color: #333; border: 2px solid #333; padding: 6px 15px; font-size: 0.8rem; font-weight: bold; border-radius: 18px; cursor: pointer; transition: all 0.3s; width: 180px; transform: scale(1);" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">GỬI MỪNG CƯỚI</button>
+        </div>
+        
+        <!-- Xem Chỉ Đường Button -->
+        <div style="text-align: center; margin-bottom: 5px;" data-aos="fade-up" data-aos-delay="600">
+            <button onclick="window.open('https://www.google.com/maps?q=9.346606,105.624207', '_blank')" style="background: #1a5f2a; color: white; border: 2px solid #1a5f2a; padding: 6px 15px; font-size: 0.8rem; font-weight: bold; border-radius: 18px; cursor: pointer; transition: all 0.3s; width: 160px;">Xem Chỉ Đường</button>
+        </div>
+        
+        <!-- Google Maps -->
+        <div style="border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);" data-aos="zoom-in" data-aos-delay="650">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d1704.4301724060972!2d105.624207!3d9.346606!3m2!1i1024!2i768!4f13.1!5e1!3m2!1svi!2sus!4v1781786323276!5m2!1svi!2sus" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </div>
 </div>
 </section>
 
 <!-- Thời gian và Đồng hồ đếm ngược -->
-<section class="section-padding">
+<section style="padding: 40px 20px;">
 <div class="container">
     <div class="section-title" data-aos="fade-up">
         <h2>Thời Gian Lễ Cưới</h2>
@@ -848,7 +1282,7 @@
 </section>
 
 <!-- Thư viện Album Ảnh -->
-<section class="section-padding" style="background: #fdfcf9;">
+<section style="padding: 40px 20px; background: #fdfcf9;">
 <div class="container">
     <div class="section-title" data-aos="fade-up">
         <h2>Album Hình Cưới</h2>
@@ -866,7 +1300,7 @@
 </section>
 
 <!-- Địa điểm tổ chức & Bản đồ định vị -->
-<section class="section-padding">
+<section style="padding: 40px 20px;">
 <div class="container">
     <div class="section-title" data-aos="fade-up">
         <h2>Địa Điểm Tổ Chức</h2>
@@ -1276,6 +1710,16 @@ function openInvite(){
         document.getElementById('welcome').style.display = 'none';
         autoScrollActive = true;
         startAutoScroll();
+        // Try to play hero video when invite is opened
+        const hv = document.getElementById('heroVideo');
+        const hvBtn = document.getElementById('heroVideoBtn');
+        if (hv) {
+            hv.play().then(()=>{
+                if (hvBtn) hvBtn.classList.add('hidden');
+            }).catch(()=>{
+                if (hvBtn) hvBtn.classList.remove('hidden');
+            });
+        }
     }, 1000);
     playWeddingMusic();
 }
@@ -1311,7 +1755,339 @@ topBtn.onclick = () => {
     }, 700);
 };
 
+// Hero video play button logic
+document.addEventListener('DOMContentLoaded', () => {
+    const hv = document.getElementById('heroVideo');
+    const hvBtn = document.getElementById('heroVideoBtn');
+    if (!hv || !hvBtn) return;
+    // Initially hide button; show if video is paused
+    hvBtn.classList.add('hidden');
+    // If video cannot autoplay, show button
+    hv.play().then(()=>{
+        hvBtn.classList.add('hidden');
+    }).catch(()=>{
+        hvBtn.classList.remove('hidden');
+    });
+
+    hvBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        hv.play().then(()=>{
+            hvBtn.classList.add('hidden');
+        }).catch(()=>{
+            // cannot play
+        });
+    });
+});
+
 // (heart editor removed)
+
+// Celebration effects (fireworks and cherry blossoms)
+let celebrationCanvas, celebrationCtx;
+let fireworks = [];
+let particles = [];
+let cherryBlossoms = [];
+let celebrationAnimationId;
+let celebrationActive = false;
+
+function showCelebration() {
+    console.log('showCelebration called');
+    
+    // Show thank you modal
+    const thankYouModal = document.getElementById('thankYouModal');
+    if (thankYouModal) {
+        thankYouModal.style.display = 'flex';
+    }
+    
+    // Create CSS-based confetti effect
+    createConfetti();
+    
+    // Stop after 5 seconds
+    setTimeout(() => {
+        const confettiContainer = document.getElementById('confetti-container');
+        if (confettiContainer && confettiContainer.parentNode) {
+            confettiContainer.parentNode.removeChild(confettiContainer);
+        }
+    }, 5000);
+}
+
+function createConfetti() {
+    const container = document.createElement('div');
+    container.id = 'confetti-container';
+    container.style.position = 'fixed';
+    container.style.top = '0';
+    container.style.left = '0';
+    container.style.width = '100%';
+    container.style.height = '100%';
+    container.style.zIndex = '10000';
+    container.style.pointerEvents = 'none';
+    container.style.overflow = 'hidden';
+    document.body.appendChild(container);
+    
+    const colors = ['#ff0000', '#ff6600', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#ff00ff', '#ffffff', '#ffd700'];
+    
+    for (let i = 0; i < 150; i++) {
+        const confetti = document.createElement('div');
+        confetti.style.position = 'absolute';
+        confetti.style.width = Math.random() * 10 + 5 + 'px';
+        confetti.style.height = Math.random() * 10 + 5 + 'px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.top = '-20px';
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+        confetti.style.animationDelay = Math.random() * 2 + 's';
+        container.appendChild(confetti);
+    }
+    
+    // Add CSS animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+function closeThankYouModal() {
+    const modal = document.getElementById('thankYouModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function createCherryBlossom() {
+    return {
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight - window.innerHeight,
+        size: Math.random() * 15 + 10,
+        speedY: Math.random() * 2 + 1,
+        speedX: Math.random() * 2 - 1,
+        rotation: Math.random() * 360,
+        rotationSpeed: Math.random() * 2 - 1,
+        color: `rgba(255, ${150 + Math.random() * 50}, ${180 + Math.random() * 50}, ${0.6 + Math.random() * 0.4})`
+    };
+}
+
+function createFirework(x, y) {
+    const colors = ['#ff0000', '#ff6600', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#ff00ff', '#ffffff'];
+    const particleCount = 100;
+    
+    for (let i = 0; i < particleCount; i++) {
+        const angle = (Math.PI * 2 * i) / particleCount;
+        const velocity = Math.random() * 5 + 2;
+        particles.push({
+            x: x,
+            y: y,
+            vx: Math.cos(angle) * velocity,
+            vy: Math.sin(angle) * velocity,
+            alpha: 1,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            size: Math.random() * 3 + 1
+        });
+    }
+}
+
+function launchFireworks() {
+    if (!celebrationActive) return;
+    
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * (window.innerHeight * 0.5);
+    createFirework(x, y);
+    
+    setTimeout(launchFireworks, Math.random() * 500 + 200);
+}
+
+function animateCelebration() {
+    if (!celebrationActive) return;
+    
+    celebrationCtx.clearRect(0, 0, celebrationCanvas.width, celebrationCanvas.height);
+    
+    console.log('Animating frame, particles:', particles.length, 'blossoms:', cherryBlossoms.length);
+    
+    // Update and draw cherry blossoms
+    cherryBlossoms.forEach(blossom => {
+        blossom.y += blossom.speedY;
+        blossom.x += blossom.speedX;
+        blossom.rotation += blossom.rotationSpeed;
+        
+        if (blossom.y > window.innerHeight) {
+            blossom.y = -20;
+            blossom.x = Math.random() * window.innerWidth;
+        }
+        
+        celebrationCtx.save();
+        celebrationCtx.translate(blossom.x, blossom.y);
+        celebrationCtx.rotate(blossom.rotation * Math.PI / 180);
+        celebrationCtx.fillStyle = blossom.color;
+        celebrationCtx.beginPath();
+        celebrationCtx.moveTo(0, 0);
+        celebrationCtx.bezierCurveTo(-blossom.size / 2, -blossom.size / 2, -blossom.size / 2, blossom.size / 2, 0, blossom.size);
+        celebrationCtx.bezierCurveTo(blossom.size / 2, blossom.size / 2, blossom.size / 2, -blossom.size / 2, 0, 0);
+        celebrationCtx.fill();
+        celebrationCtx.restore();
+    });
+    
+    // Update and draw particles
+    particles.forEach((particle, index) => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        particle.vy += 0.05; // gravity
+        particle.alpha -= 0.02;
+        
+        if (particle.alpha <= 0) {
+            particles.splice(index, 1);
+            return;
+        }
+        
+        celebrationCtx.save();
+        celebrationCtx.globalAlpha = particle.alpha;
+        celebrationCtx.fillStyle = particle.color;
+        celebrationCtx.beginPath();
+        celebrationCtx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        celebrationCtx.fill();
+        celebrationCtx.restore();
+    });
+    
+    celebrationAnimationId = requestAnimationFrame(animateCelebration);
+}
+
+// QR Modal function
+function showQRModal() {
+    const modal = document.getElementById('qrModal');
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+    
+    // Create CSS-based confetti effect
+    createConfetti();
+    
+    // Stop after 5 seconds
+    setTimeout(() => {
+        const confettiContainer = document.getElementById('confetti-container');
+        if (confettiContainer && confettiContainer.parentNode) {
+            confettiContainer.parentNode.removeChild(confettiContainer);
+        }
+    }, 5000);
+}
+
+function showQRModal2() {
+    const modal = document.getElementById('qrModal2');
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+    
+    // Create CSS-based confetti effect
+    createConfetti();
+    
+    // Stop after 5 seconds
+    setTimeout(() => {
+        const confettiContainer = document.getElementById('confetti-container');
+        if (confettiContainer && confettiContainer.parentNode) {
+            confettiContainer.parentNode.removeChild(confettiContainer);
+        }
+    }, 5000);
+}
+
+function closeQRModal2() {
+    const modal = document.getElementById('qrModal2');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function closeQRModal() {
+    const modal = document.getElementById('qrModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const qrModal = document.getElementById('qrModal');
+    const qrModal2 = document.getElementById('qrModal2');
+    const thankYouModal = document.getElementById('thankYouModal');
+    
+    if (event.target == qrModal) {
+        qrModal.style.display = 'none';
+    }
+    
+    if (event.target == qrModal2) {
+        qrModal2.style.display = 'none';
+    }
+    
+    if (event.target == thankYouModal) {
+        thankYouModal.style.display = 'none';
+    }
+}
 </script>
+
+<!-- Thank You Modal -->
+<div id="thankYouModal" style="display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center; animation: fadeIn 0.3s ease-in-out;">
+    <div style="background: white; padding: 40px; border-radius: 20px; max-width: 450px; width: 90%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3); position: relative; animation: scaleIn 0.3s ease-in-out;">
+        <button onclick="closeThankYouModal()" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: #333; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">&times;</button>
+        <div style="font-size: 60px; margin-bottom: 20px;">🎉</div>
+        <h3 style="color: var(--accent-gold); margin-bottom: 15px; font-size: 1.8rem;">Cảm ơn bạn!</h3>
+        <p style="color: #333; font-size: 1.1rem; margin-bottom: 10px;">Cảm ơn bạn đã tham dự cùng chúng tôi</p>
+        <p style="color: #666; font-size: 0.95rem; margin-bottom: 20px;">Sự hiện diện của bạn là niềm vui lớn cho gia đình chúng tôi trong ngày trọng đại này.</p>
+        <button onclick="closeThankYouModal()" style="background: var(--accent-gold); color: white; border: none; padding: 10px 30px; font-size: 1rem; font-weight: bold; border-radius: 25px; cursor: pointer; transition: all 0.3s;">Đóng</button>
+    </div>
+</div>
+
+<!-- QR Code Modal -->
+<div id="qrModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center; animation: fadeIn 0.3s ease-in-out;">
+    <div style="background: white; padding: 30px; border-radius: 20px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3); position: relative; animation: scaleIn 0.3s ease-in-out;">
+        <button onclick="closeQRModal()" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: #333; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">&times;</button>
+        <h3 style="color: var(--accent-gold); margin-bottom: 20px; font-size: 1.5rem;">Gửi Mừng Cưới</h3>
+        <div style="margin-bottom: 20px;">
+            <img src="qr-code-placeholder.png" alt="QR Code" style="width: 200px; height: 200px; object-fit: contain; margin: 0 auto; display: block; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+        </div>
+        <div style="text-align: left; margin-top: 15px;">
+            <p style="margin: 10px 0; color: #333; font-weight: bold;">Ngân hàng: <span style="font-weight: normal;">MB Bank</span></p>
+            <p style="margin: 10px 0; color: #333; font-weight: bold;">Số tài khoản: <span style="font-weight: normal; color: var(--accent-gold);">1234567890</span></p>
+            <p style="margin: 10px 0; color: #333; font-weight: bold;">Chủ tài khoản: <span style="font-weight: normal;">TRƯƠNG VĂN ÚT</span></p>
+        </div>
+        <p style="margin-top: 15px; color: #888; font-size: 0.8rem; white-space: nowrap;">Cảm ơn sự quan tâm và chúc phúc của quý khách!</p>
+        <button onclick="window.open('https://www.mbbank.com.vn', '_blank')" style="margin-top: 15px; background: var(--accent-gold); color: white; border: none; padding: 8px 20px; font-size: 0.85rem; font-weight: bold; border-radius: 20px; cursor: pointer; transition: all 0.3s;">Chuyển đến ngân hàng</button>
+    </div>
+</div>
+
+<!-- QR Code Modal 2 (Nhà Gái) -->
+<div id="qrModal2" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center; animation: fadeIn 0.3s ease-in-out;">
+    <div style="background: white; padding: 30px; border-radius: 20px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3); position: relative; animation: scaleIn 0.3s ease-in-out;">
+        <button onclick="closeQRModal2()" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: #333; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">&times;</button>
+        <h3 style="color: var(--accent-gold); margin-bottom: 20px; font-size: 1.5rem;">Gửi Mừng Cưới</h3>
+        <div style="margin-bottom: 20px;">
+            <img src="qr-code-placeholder.png" alt="QR Code" style="width: 200px; height: 200px; object-fit: contain; margin: 0 auto; display: block; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+        </div>
+        <div style="text-align: left; margin-top: 15px;">
+            <p style="margin: 10px 0; color: #333; font-weight: bold;">Ngân hàng: <span style="font-weight: normal;">Vietcombank</span></p>
+            <p style="margin: 10px 0; color: #333; font-weight: bold;">Số tài khoản: <span style="font-weight: normal; color: var(--accent-gold);">0987654321</span></p>
+            <p style="margin: 10px 0; color: #333; font-weight: bold;">Chủ tài khoản: <span style="font-weight: normal;">TÔ ẤP LĂNG</span></p>
+        </div>
+        <p style="margin-top: 15px; color: #888; font-size: 0.8rem; white-space: nowrap;">Cảm ơn sự quan tâm và chúc phúc của quý khách!</p>
+        <button onclick="window.open('https://www.vcb.com.vn', '_blank')" style="margin-top: 15px; background: var(--accent-gold); color: white; border: none; padding: 8px 20px; font-size: 0.85rem; font-weight: bold; border-radius: 20px; cursor: pointer; transition: all 0.3s;">Chuyển đến ngân hàng</button>
+    </div>
+</div>
+
+<style>
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+</style>
 </body>
 </html>
