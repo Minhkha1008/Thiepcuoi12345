@@ -83,27 +83,21 @@
 
         /* 1. Khung nền cố định - Đảm bảo vừa khít 100% màn hình Zalo/Messenger */
         #welcome {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            /* Dự phòng trình duyệt cũ */
-            height: 100dvh;
-            /* Chiều cao động chuẩn xác cho mọi điện thoại */
-            background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
-                url('https://images.unsplash.com/photo-1519225495810-7512c696505a?q=80&w=1600&auto=format&fit=crop') center center/cover no-repeat;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            z-index: 10000;
-            transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
-
-            /* Ép chạy mượt bằng chip đồ họa GPU */
-            -webkit-transform: translate3d(0, 0, 0);
-            transform: translate3d(0, 0, 0);
-        }
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    /* Đổi vh thành dvh để tự động tính theo màn hình Zalo/Mess */
+    height: 100vh; 
+    height: 100dvh; 
+    background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('https://images.unsplash.com/photo-1519225495810-7512c696505a?q=80&w=1600&auto=format&fit=crop') center center/cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 10000;
+    transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
+}
 
         #petalCanvas {
             position: absolute;
@@ -118,30 +112,26 @@
         /* 2. Hộp nội dung - Tự co giãn thông minh và tạo thanh cuộn nội bộ nếu màn hình quá nhỏ */
         /* 2. Hộp nội dung - Tự co giãn thông minh và tạo thanh cuộn nội bộ nếu màn hình quá nhỏ */
         .welcome-box {
-            width: 90%;
-            max-width: 400px;
-            /* Giới hạn chiều rộng đẹp mắt trên cả laptop */
-
-            /* CỐT LÕI SỬA LỖI: Giới hạn chiều cao tối đa không vượt quá màn hình điện thoại */
-            max-height: 85dvh;
-
-            /* Nếu nội dung bên trong quá dài (trên điện thoại màn hình ngắn), 
-       nó sẽ tự động cho phép vuốt cuộn LÊN/XUỐNG NGAY TRONG HỘP này để bấm được nút */
-            overflow-y: auto;
-
-            /* Tối ưu khoảng cách đệm (padding) nhỏ lại một chút trên mobile để nhường chỗ cho nút */
-            padding: 25px 20px;
-
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 8px;
-            color: white;
-
-            /* Thanh cuộn nội bộ nếu có sẽ ẩn đi cho đẹp hoặc hiện thanh mảnh */
-            scrollbar-width: thin;
-        }
+    /* Đổi kích thước pixel cố định cũ thành kích thước động */
+    width: 90%;
+    max-width: 380px; 
+    
+    /* Khống chế chiều cao không cho tràn viền */
+    max-height: 85dvh; 
+    
+    /* Tạo thanh cuộn nội bộ nếu chữ quá dài hoặc màn hình quá ngắn */
+    overflow-y: auto; 
+    
+    /* Thu nhỏ padding lại một chút cho vừa vặn */
+    padding: 25px 20px; 
+    
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 4px;
+    color: white;
+}
 
         /* Tối ưu thêm: Thu nhỏ một chút khoảng cách của các hàng chữ bên trong màn hình Welcome trên mobile */
         .welcome-box h1,
