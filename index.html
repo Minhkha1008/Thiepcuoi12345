@@ -72,22 +72,32 @@
 
         /* Screen Welcome */
         #welcome {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            height: 100dvh;
-            background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('https://images.unsplash.com/photo-1519225495810-7512c696505a?q=80&w=1600&auto=format&fit=crop') center center/cover no-repeat;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            z-index: 10000;
-            will-change: transform, opacity;
-            transform: translateZ(0);
-            transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
-        }
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    
+    /* Giải pháp cốt lõi cho Zalo/Messenger: dùng dvh thay cho vh */
+    height: 100vh; /* Dự phòng cho các trình duyệt quá cũ */
+    height: 100dvh; /* Tự động co giãn theo thanh công cụ động của Zalo/Mess */
+    
+    background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), 
+                url('https://images.unsplash.com/photo-1519225495810-7512c696505a?q=80&w=1600&auto=format&fit=crop') center center/cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 10000;
+    
+    /* Ép trình duyệt sử dụng GPU (Tăng tốc phần cứng) giúp hiệu ứng đóng/mở mượt mà, không bị giật lag */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    
+    /* Giữ nguyên hiệu ứng chuyển cảnh của bạn */
+    transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
+}
         #petalCanvas {
             position: absolute;
             top: 0;
@@ -98,17 +108,17 @@
             z-index: 1;
         }
         .welcome-box {
-            z-index: 2;
-            padding: 40px 30px;
-            background: rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-            max-width: 90%;
-            width: 450px;
-        }
+    max-width: 90%;
+    max-height: 90dvh; /* Giới hạn chiều cao nội dung theo khung nhìn động */
+    overflow-y: auto; /* Nếu màn hình điện thoại quá lùn, nội dung tự cuộn bên trong chứ không phá vỡ layout */
+    padding: 40px 30px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px); /* Hỗ trợ hiệu ứng mờ kính trên Safari (iOS) mượt hơn */
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 4px;
+    color: white;
+}
         .welcome-box h1 {
             font-family: var(--font-cursive-title);
             font-size: 4.5rem;
@@ -454,25 +464,25 @@
 
         /* Music Floating Control */
         .music-widget {
-            position: fixed;
-            right: 25px;
-            bottom: 25px;
-            z-index: 9999;
-            transform: translateZ(0);
-            will-change: transform;
-            display: inline-flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            padding: 8px 10px;
-            border-radius: 48px;
-            box-shadow: 0 14px 35px rgba(0,0,0,0.18);
-            gap: 10px;
-            border: 1px solid rgba(197, 168, 106, 0.28);
-            width: auto;
-            min-width: 0;
-        }
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    z-index: 9999;
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 8px 15px;
+    border-radius: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(197, 168, 106, 0.2);
+    transition: all 0.3s ease;
+    
+    /* Bật tăng tốc phần cứng để cố định vị trí không bị nhảy khi cuộn trang trên Safari Mobile */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
         .music-widget button {
             border: none;
             background: var(--accent-gold);
@@ -618,24 +628,27 @@
 
         /* Top Button */
         #topBtn {
-            position: fixed;
-            right: 25px;
-            bottom: 85px;
-            width: 40px;
-            height: 40px;
-            border: none;
-            border-radius: 50%;
-            z-index: 9998;
-            transform: translateZ(0);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            background: var(--primary-dark);
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
+    position: fixed;
+    right: 25px;
+    bottom: 85px; /* Đẩy lên trên widget nhạc một chút để không bị đè nhau */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent-gold);
+    color: white;
+    border: none;
+    cursor: pointer;
+    z-index: 9998;
+    display: none; /* Sẽ được hiện lên bằng JS khi cuộn chuột */
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    
+    /* Tránh hiện tượng giật giật khi cuộn nhanh trên mobile */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
         #topBtn:hover {
             background: var(--accent-gold);
         }
@@ -845,8 +858,19 @@
 
         /* Extra small devices adjustments (phones) */
         @media (max-width: 480px) {
-            html { font-size: 14px; }
-            body { line-height: 1.45; }
+            html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    background-color: var(--bg-creme);
+    color: var(--primary-dark);
+    font-family: var(--font-sans);
+    
+    /* Kích hoạt cuộn mượt cảm ứng lực quán tính riêng cho các thiết bị chạy iOS (iPhone/iPad) */
+    -webkit-overflow-scrolling: touch;
+}
 
             /* Hero */
             .hero { padding: 20px 10px; background-position: center top; }
