@@ -1021,9 +1021,35 @@
             .section-padding { padding: 60px 12px; }
             .section-title { margin-bottom: 28px; }
         }
+
+        /* Hiển thị như điện thoại trên laptop */
+@media (min-width: 769px){
+
+    body{
+        background:#e9e9e9;
+    }
+
+    .mobile-frame{
+        width:430px;
+        max-width:430px;
+        margin:auto;
+        background:#fff;
+        min-height:100vh;
+        box-shadow:0 0 25px rgba(0,0,0,.15);
+        overflow:hidden;
+    }
+
+    .hero,
+    .couple-section,
+    .rsvp-section,
+    footer{
+        width:100%;
+    }
+}
     </style>
 </head>
 <body>
+<div class="mobile-frame">
 
 <!-- Màn hình chào mừng độc quyền -->
 <div id="welcome">
@@ -2124,5 +2150,6 @@ window.onclick = function(event) {
     to { transform: scale(1); opacity: 1; }
 }
 </style>
+</div>
 </body>
 </html>
