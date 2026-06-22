@@ -33,6 +33,7 @@
             background-color: var(--bg-creme);
             color: var(--primary-dark);
             font-family: var(--font-sans);
+            -webkit-overflow-scrolling: touch;
         }
 
         /* Typography */
@@ -72,13 +73,19 @@
         /* Screen Welcome */
         #welcome {
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
             background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('https://images.unsplash.com/photo-1519225495810-7512c696505a?q=80&w=1600&auto=format&fit=crop') center center/cover no-repeat;
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
             z-index: 10000;
+            will-change: transform, opacity;
+            transform: translateZ(0);
             transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
         }
         #petalCanvas {
@@ -451,10 +458,13 @@
             right: 25px;
             bottom: 25px;
             z-index: 9999;
+            transform: translateZ(0);
+            will-change: transform;
             display: inline-flex;
             align-items: center;
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             padding: 8px 10px;
             border-radius: 48px;
             box-shadow: 0 14px 35px rgba(0,0,0,0.18);
@@ -607,7 +617,7 @@
         }
 
         /* Top Button */
-        #topBtn { 
+        #topBtn {
             position: fixed;
             right: 25px;
             bottom: 85px;
@@ -616,12 +626,13 @@
             border: none;
             border-radius: 50%;
             z-index: 9998;
+            transform: translateZ(0);
             display: none;
             justify-content: center;
             align-items: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            background: var(--primary-dark); 
-            color: #fff; 
+            background: var(--primary-dark);
+            color: #fff;
             cursor: pointer;
             transition: all 0.3s;
         }
