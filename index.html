@@ -168,6 +168,33 @@
             margin: 15px auto 0 auto;
         }
 
+        .intro-typing {
+            font-family: 'Dancing Script', 'Segoe Script', cursive;
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: #5d4c3d;
+            min-height: 5.2em;
+            white-space: pre-wrap;
+            letter-spacing: 0.3px;
+            position: relative;
+            display: inline-block;
+            text-align: left;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .intro-typing::after {
+            content: '|';
+            display: inline-block;
+            margin-left: 2px;
+            color: var(--accent-gold);
+            animation: introCursor 0.7s steps(1) infinite;
+            font-weight: 700;
+        }
+        @keyframes introCursor {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
         /* Screen Welcome */
         #welcome {
     position: fixed;
@@ -807,6 +834,10 @@
         }
         .album-cta-link:active {
             transform: translateY(-1px) scale(0.97);
+        }
+        .album-cta-text {
+            font-size: 0.80rem;
+            line-height: 1.30;
         }
         .album-cta-icon {
             font-size: 1.15rem;
@@ -1715,8 +1746,7 @@
         <div class="line"></div>
     </div>
     <div class="container" data-aos="fade-up" style="max-width: 800px; line-height: 2.2; color: #555; font-size: 0.95rem; white-space: normal; word-break: normal; overflow-wrap: normal;">
-        "Tình yêu bước vào đời sống của chúng ta tựa như một phép màu. Nó gắn kết hai tâm hồn xa lạ xích lại gần nhau hơn, hòa chung một nhịp đập."<br>
-        Chúng tôi rất hân hạnh được đón tiếp quý khách đến tham dự, chung vui và chia sẻ khoảnh khắc hạnh phúc trọn vẹn tại lễ thành hôn của chúng tôi.
+        <div id="introTypingText" class="intro-typing" aria-live="polite"></div>
     </div>
 </section>
 
@@ -2067,6 +2097,22 @@ AOS.init({
   once: false,
   mirror: true
 });
+
+const introText = "\"Tình yêu bước vào đời sống của chúng ta tựa như một phép màu. Nó gắn kết hai tâm hồn xa lạ xích lại gần nhau hơn, hòa chung một nhịp đập.\"\n\"...\"\nChúng tôi rất hân hạnh được đón tiếp quý khách đến tham dự, chung vui và chia sẻ khoảnh khắc hạnh phúc trọn vẹn tại lễ thành hôn của chúng tôi.";
+const introTypingEl = document.getElementById('introTypingText');
+
+if (introTypingEl) {
+    let i = 0;
+    function typeIntroText() {
+        if (i <= introText.length) {
+            introTypingEl.textContent = introText.slice(0, i);
+            i += 1;
+            const speed = Math.random() * 40 + 35;
+            setTimeout(typeIntroText, speed);
+        }
+    }
+    typeIntroText();
+}
 
 // Gallery slide-in animation on scroll
 const galleryObserver = new IntersectionObserver((entries) => {
