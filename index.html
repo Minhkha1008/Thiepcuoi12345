@@ -468,53 +468,148 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-            border: 1px solid #eee;
-            border-bottom: 3px solid var(--accent-gold);
+            background: rgba(255,255,255,0.92);
+            border-radius: 16px;
+            box-shadow:
+                0 14px 35px rgba(0,0,0,0.06),
+                inset 0 0 0 1px rgba(197,168,106,0.16);
+            border: 1px solid rgba(234,230,225,0.7);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transform: translateZ(0);
+            border-bottom: 3px solid rgba(197, 168, 106, 0.85);
         }
+        .countdown-item::before{
+            content:"";
+            position:absolute;
+            inset:-40% -50%;
+            background: linear-gradient(110deg, transparent 0%, rgba(197,168,106,0.18) 35%, rgba(255,255,255,0.45) 50%, rgba(197,168,106,0.18) 65%, transparent 100%);
+            transform: translateX(-40%) rotate(10deg);
+            opacity: 0;
+        }
+        .countdown-item.pop{
+            animation: countdownPop 320ms ease-out;
+        }
+        .countdown-item.pop::before{
+            opacity: 1;
+            animation: countdownShine 760ms ease-out forwards;
+        }
+        @keyframes countdownPop{
+            0%{ transform: scale(1); }
+            50%{ transform: scale(1.06); }
+            100%{ transform: scale(1); }
+        }
+        @keyframes countdownShine{
+            0%{ transform: translateX(-55%) rotate(10deg); }
+            100%{ transform: translateX(55%) rotate(10deg); opacity: 0; }
+        }
+
         .countdown-item span {
             font-size: 2.2rem;
             font-family: var(--font-serif);
-            font-weight: 600;
+            font-weight: 700;
             color: var(--primary-dark);
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
         }
         .countdown-item small {
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-muted);
-            font-weight: 500;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Section wrapper (sang hơn) */
+        .wedding-time-section{
+            position: relative;
+            border-radius: 22px;
+            padding: 46px 22px;
+            background:
+                radial-gradient(900px 280px at 50% 0%, rgba(197,168,106,0.18) 0%, rgba(197,168,106,0.00) 60%),
+                linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.58) 100%);
+            box-shadow:
+                0 22px 55px rgba(0,0,0,0.05),
+                inset 0 0 0 1px rgba(197,168,106,0.18);
+            overflow: hidden;
+        }
+        .wedding-time-section::after{
+            content:"";
+            position:absolute;
+            inset:0;
+            pointer-events:none;
+            background:
+                linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.25) 35%, rgba(197,168,106,0.18) 50%, rgba(255,255,255,0.15) 65%, transparent 100%);
+            opacity: 0.18;
+            transform: translateX(-20%);
+            animation: timeSectionShimmer 7.5s ease-in-out infinite;
+        }
+        @keyframes timeSectionShimmer{
+            0%,100%{ transform: translateX(-22%); opacity: 0.12; }
+            50%{ transform: translateX(22%); opacity: 0.22; }
         }
 
         .wedding-calendar {
             max-width: 380px;
             margin: 0 auto;
-            background: #fff;
-            padding: 35px 25px;
-            border-radius: 16px;
-            border: 1px solid #eae6e1;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+            background: rgba(255,255,255,0.88);
+            padding: 30px 22px;
+            border-radius: 18px;
+            border: 1px solid rgba(234,230,225,0.9);
+            box-shadow:
+                0 14px 35px rgba(0,0,0,0.05),
+                inset 0 0 0 1px rgba(197,168,106,0.16);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        .wedding-calendar::before{
+            content:"";
+            position:absolute;
+            inset:-60% -60%;
+            background: radial-gradient(circle at 35% 20%, rgba(197,168,106,0.20), transparent 55%);
+            opacity: 0.9;
+            pointer-events:none;
         }
         .calendar-title {
             text-align: center;
             font-family: var(--font-serif);
-            font-weight: 600;
-            font-size: 1.5rem;
-            margin-bottom: 25px;
+            font-weight: 700;
+            font-size: 1.55rem;
+            margin-bottom: 20px;
             color: var(--primary-dark);
             letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
         }
+        .calendar-title::after{
+            content:"❦";
+            position:absolute;
+            left:50%;
+            transform: translateX(-50%);
+            bottom: -10px;
+            font-size: 1.05rem;
+            color: var(--accent-gold);
+            opacity: 0.8;
+        }
+
         .calendar-days-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 12px;
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 0.92rem;
+            position: relative;
+            z-index: 1;
         }
         .calendar-header {
-            font-weight: 600;
+            font-weight: 700;
             color: var(--accent-gold);
             font-size: 0.85rem;
             padding-bottom: 10px;
@@ -527,10 +622,11 @@
             justify-content: center;
             align-items: center;
             color: #444;
+            z-index: 0;
         }
         .calendar-day.active-wedding {
             color: #fff;
-            font-weight: bold;
+            font-weight: 800;
             z-index: 1;
         }
         .calendar-day.active-wedding::after {
@@ -538,28 +634,397 @@
             position: absolute;
             width: 34px;
             height: 34px;
-            background: var(--accent-gold);
+            background: linear-gradient(180deg, rgba(197,168,106,1) 0%, rgba(181,147,86,1) 100%);
             border-radius: 50%;
             z-index: -1;
-            box-shadow: 0 4px 10px rgba(197, 168, 106, 0.4);
+            box-shadow:
+                0 10px 22px rgba(197, 168, 106, 0.32),
+                0 0 0 6px rgba(197,168,106,0.12);
+            animation: haloPulse 2.2s ease-in-out infinite;
+        }
+        @keyframes haloPulse{
+            0%,100%{ box-shadow: 0 10px 22px rgba(197,168,106,0.32), 0 0 0 6px rgba(197,168,106,0.10); }
+            50%{ box-shadow: 0 12px 26px rgba(197,168,106,0.45), 0 0 0 10px rgba(197,168,106,0.16); }
         }
 
-        /* Gallery Masonry */
+        /* Album / Gallery Premium */
         .gallery-grid {
-            columns: 3;
-            gap: 15px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            align-items: stretch;
         }
-        .gallery-grid img {
+        .gallery-item{
+            position: relative;
+            border-radius: 14px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.55);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            border: 1px solid rgba(197,168,106,0.18);
+            transform: translateZ(0);
+        }
+        .gallery-item img{
             width: 100%;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            transition: all 0.4s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.04);
-            cursor: pointer;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            aspect-ratio: 4 / 3;
+            transition: transform .5s ease, filter .5s ease;
+            filter: saturate(1.04) contrast(1.02);
         }
-        .gallery-grid img:hover {
-            transform: scale(1.03);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        .gallery-item::after{
+            content:'';
+            position:absolute;
+            inset:-30% -50%;
+            background: linear-gradient(115deg, rgba(255,255,255,0) 35%, rgba(255,255,255,0.75) 50%, rgba(255,255,255,0) 65%);
+            transform: translateX(-30%) rotate(8deg);
+            opacity: 0.85;
+            transition: opacity .25s ease;
+            pointer-events:none;
+            animation: galleryShine 2s ease-in-out infinite;
+        }
+        .gallery-item img{
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            aspect-ratio: 4 / 3;
+            transition: transform .5s ease, filter .5s ease;
+            filter: saturate(1.12) contrast(1.04);
+            transform: scale(1.06);
+        }
+        @keyframes galleryShine{
+            0%{ transform: translateX(-35%) rotate(8deg); opacity: 0; }
+            25%{ opacity: .9; }
+            100%{ transform: translateX(35%) rotate(8deg); opacity: 0; }
+        }
+
+        /* Custom slide-in animations for gallery */
+        .gallery-item.slide-from-left,
+        .gallery-item.slide-from-right {
+            opacity: 0;
+        }
+        .gallery-item.slide-from-left.animate,
+        .gallery-item.slide-from-right.animate {
+            opacity: 1;
+        }
+        .gallery-item.slide-from-left.animate {
+            animation: slideInLeft 0.8s ease forwards;
+        }
+        .gallery-item.slide-from-right.animate {
+            animation: slideInRight 0.8s ease forwards;
+        }
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1.06);
+            }
+        }
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1.06);
+            }
+        }
+        .gallery-caption{
+            position:absolute;
+            left: 12px;
+            right: 12px;
+            bottom: 10px;
+            padding: 8px 10px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.72);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: rgba(30,30,30,0.9);
+            font-size: .85rem;
+            font-weight: 700;
+            letter-spacing: .4px;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity .25s ease, transform .25s ease;
+        }
+        .gallery-item:hover .gallery-caption{
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        body.page-blocked {
+            overflow: hidden;
+        }
+        body.page-blocked > * {
+            pointer-events: none;
+        }
+
+        .album-cta-wrapper {
+            margin-top: 26px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+        }
+        .album-cta-link {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 24px;
+            border-radius: 999px;
+            text-decoration: none;
+            color: #7a3e2b;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            background: linear-gradient(135deg, #fff5e8 0%, #ffe2eb 45%, #f5cfa7 100%);
+            border: 1px solid rgba(255,255,255,0.8);
+            box-shadow: 0 16px 32px rgba(193, 120, 93, 0.22);
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+        }
+        .album-cta-link::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0.2), rgba(255,255,255,0.55), rgba(255,255,255,0.2));
+            transform: translateX(-120%);
+            transition: transform 0.6s ease;
+        }
+        .album-cta-link:hover::before {
+            transform: translateX(120%);
+        }
+        .album-cta-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 38px rgba(173, 93, 78, 0.28);
+            color: #6f3524;
+        }
+        .album-cta-link:active {
+            transform: translateY(-1px) scale(0.97);
+        }
+        .album-cta-icon {
+            font-size: 1.15rem;
+            animation: albumFloat 1.25s ease-in-out infinite;
+        }
+        .album-cta-hand {
+            font-size: 1.05rem;
+            animation: albumHand 1.05s ease-in-out infinite;
+        }
+        .album-cta-hint {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #8d6a46;
+            font-style: italic;
+            letter-spacing: 0.3px;
+        }
+        @keyframes albumFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        @keyframes albumHand {
+            0%, 100% { transform: translateX(0) scale(1); }
+            50% { transform: translateX(3px) scale(1.06); }
+        }
+
+        /* Trái tim ghép từ nhiều ảnh */
+        .heart-mosaic-wrap{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 10px 0 0;
+        }
+
+        /* Nền bên dưới trái tim */
+        .heart-mosaic-wrap::before{
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -22px;
+            width: min(420px, 90vw);
+            height: 90px;
+            transform: translateX(-50%);
+            border-radius: 999px;
+            background-image: var(--heart-mosaic-bg-image, url('anhnentraitim.jpg'));
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: blur(2px);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Trái tim nhỏ rơi ngẫu nhiên mỗi nhịp đập */
+        .small-heart-layer{
+            position: absolute;
+            inset: 0;
+            z-index: 7;
+            pointer-events: none;
+        }
+
+        .small-heart{
+            position: absolute;
+            left: 50%;
+            top: 18%;
+            width: var(--size, 8px);
+            height: var(--size, 8px);
+
+            /* “hoa đào rơi”: thon dài + hơi xoay */
+            transform:
+                translateX(-50%)
+                rotate(var(--rot0, -20deg))
+                scaleX(calc(var(--scale, 1) * 1.35))
+                scaleY(calc(var(--scale, 1) * 0.70));
+
+            opacity: 0;
+            will-change: transform, opacity, filter;
+            filter:
+                drop-shadow(0 10px 16px rgba(255, 105, 180, 0.18))
+                drop-shadow(0 4px 10px rgba(255, 170, 210, 0.22));
+            animation: smallHeartFallRandom var(--dur, 1350ms) cubic-bezier(0.25, 0.8, 0.2, 1) forwards;
+        }
+
+        .small-heart::before{
+            content: "❧";
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: calc(var(--size, 8px) * 1.15);
+            line-height: 1;
+            /* màu mè + nhiều sắc để giống hoa đào hơn */
+            color: var(--pink, rgba(255,105,180,0.95));
+            text-shadow:
+                0 1px 0 rgba(255,255,255,0.35),
+                0 0 12px rgba(255, 105, 180, 0.18);
+            filter: blur(var(--blur, 0px));
+        }
+
+        @keyframes smallHeartFallRandom{
+            0%{
+                opacity: 0;
+                transform:
+                    translateX(-50%)
+                    translateY(0)
+                    rotate(var(--rot0, -20deg))
+                    scaleX(calc(var(--scale, 1) * 1.35))
+                    scaleY(calc(var(--scale, 1) * 0.70));
+                filter: blur(calc(var(--blur, 0px) + 0.2px));
+            }
+            12%{
+                opacity: 1;
+            }
+            55%{
+                opacity: 0.95;
+            }
+            100%{
+                opacity: 0;
+                transform:
+                    translateX(calc(-50% + var(--dx, 0px)))
+                    translateY(calc(var(--fall, 320px)))
+                    rotate(var(--rot, 35deg))
+                    scaleX(calc(var(--scale, 1) * 1.05))
+                    scaleY(calc(var(--scale, 1) * 0.62));
+                filter: blur(calc(var(--blur, 0px) + 0.6px));
+            }
+        }
+
+        /* Trên mobile giảm kích thước nét/chữ */
+        @media (max-width: 480px){
+            .heart-path{ stroke-width: 3; }
+            .heart-path.soft{ stroke-width: 2; }
+        }
+
+        @keyframes heartPulse{
+            0%, 100% { transform: scale(1); }
+            18% { transform: scale(1.04); }
+            32% { transform: scale(0.99); }
+            45% { transform: scale(1.07); }
+            60% { transform: scale(1.00); }
+        }
+        .heart-mosaic{
+            width: min(380px, 88vw);
+            aspect-ratio: 1 / 1;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            padding: 14px;
+            box-sizing: border-box;
+
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+
+            /* nhịp đập trái tim (chỉ áp dụng cho phần tile/clip-path) */
+            transform-origin: 50% 55%;
+            animation: heartPulse 1.35s ease-in-out infinite;
+
+            /* tạo hình trái tim (xấp xỉ) */
+            clip-path: polygon(
+                50% 90%,
+                18% 60%,
+                8% 45%,
+                8% 30%,
+                18% 18%,
+                34% 20%,
+                45% 30%,
+                50% 40%,
+                55% 30%,
+                66% 20%,
+                82% 18%,
+                92% 30%,
+                92% 45%,
+                82% 60%
+            );
+        }
+        .heart-tile{
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.6);
+            box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+        }
+        .heart-tile img{
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            filter: saturate(1.04) contrast(1.02);
+            transform: scale(1.02);
+            transition: transform .45s ease, filter .45s ease;
+        }
+        .heart-mosaic-wrap:hover .heart-tile img{
+            transform: scale(1.08);
+            filter: saturate(1.12) contrast(1.05);
+        }
+        .heart-glow{
+            position: absolute;
+            inset: -22px;
+            background: radial-gradient(circle at 50% 45%, rgba(255,120,170,0.26), transparent 55%);
+            pointer-events: none;
+            filter: blur(6px);
+            opacity: 0.9;
+        }
+
+        @media (max-width: 480px){
+            .heart-mosaic{
+                width: min(320px, 92vw);
+                padding: 10px;
+                gap: 5px;
+            }
+            .heart-tile{
+                border-radius: 8px;
+            }
         }
 
         /* Map Container */
@@ -737,6 +1202,11 @@
             letter-spacing: 0.02em;
             margin-bottom: 15px;
             text-align: center;
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            padding: 0 10px;
+            box-sizing: border-box;
         }
 
         .invitation-couple-name span {
@@ -928,7 +1398,15 @@
             .countdown-item { width: 75px; height: 85px; }
             .countdown-item span { font-size: 1.6rem; }
             .couple-name-main { font-size: 2.6rem; }
-            .invitation-couple-name { font-size: 2.2rem !important; white-space: nowrap !important; }
+            .invitation-couple-name { 
+                font-size: 2.2rem !important; 
+                white-space: normal !important;
+                max-width: 100% !important;
+                overflow-wrap: anywhere !important;
+                word-break: break-word !important;
+                padding: 0 8px;
+                box-sizing: border-box;
+            }
             
             /* Invitation card responsive */
             .invitation-card {
@@ -1099,12 +1577,19 @@
             
             /* Tên Bé Nhõ & Nhựt Huỳnh */
             .invitation-card > div[style*="margin: 40px"] > .invitation-couple-name {
-                font-size: 2.5rem !important;
-                margin-bottom: 10px !important;
+                font-size: 2.0rem !important;
+                margin-bottom: 8px !important;
                 font-weight: 400 !important;
                 letter-spacing: 0.02em !important;
                 color: var(--primary-dark) !important;
-                line-height: 1.1 !important;
+                line-height: 1.05 !important;
+
+                /* chống văng xuống dưới / tràn */
+                max-width: 100% !important;
+                overflow-wrap: anywhere !important;
+                word-break: break-word !important;
+                padding: 0 6px !important;
+                box-sizing: border-box !important;
             }
             
             /* Địa chỉ dưới */
@@ -1268,13 +1753,17 @@
                             text-transform: uppercase;
                         ">NHÀ TRAI</div>
                         <div style="
-                            font-size: 0.85rem;
+                            font-size: 0.75rem;
                             color: #555;
-                            line-height: 2;
+                            line-height: 1.6;
                             font-weight: 500;
-                            white-space: nowrap;
-                            text-align: left;
-                            padding-left: 10px;
+                            white-space: normal;
+                            text-align: center;
+                            max-width: 100%;
+                            overflow-wrap: break-word;
+                            word-break: break-word;
+                            padding: 0 5px;
+                            box-sizing: border-box;
                         ">
                             Ông Dư Thanh Nguyễn<br>
                             Bà Nguyễn Kiều Diễm
@@ -1292,13 +1781,17 @@
                             text-transform: uppercase;
                         ">NHÀ GÁI</div>
                         <div style="
-                            font-size: 0.85rem;
+                            font-size: 0.75rem;
                             color: #555;
-                            line-height: 2;
+                            line-height: 1.6;
                             font-weight: 500;
-                            white-space: nowrap;
-                            text-align: left;
-                            padding-left: 27px;
+                            white-space: normal;
+                            text-align: center;
+                            max-width: 100%;
+                            overflow-wrap: break-word;
+                            word-break: break-word;
+                            padding: 0 5px;
+                            box-sizing: border-box;
                         ">
                             Ông Trương Văn Út<br>
                             Bà Tô Ấp Lăng
@@ -1379,7 +1872,7 @@
         </div>
     </div>
 
-    <div style="margin-top: 0; text-align: center; background: linear-gradient(135deg, rgba(255,249,240,0.95) 0%, rgba(255,255,255,0.95) 100%), url('hoasen.jpg'); background-size: cover; background-position: center; padding: 0; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.08);">
+<div style="margin-top: 0; text-align: center; background: linear-gradient(135deg, rgba(255,249,240,0.95) 0%, rgba(255,255,255,0.95) 100%), url('hoasen.jpg'); background-size: cover; background-position: center; padding: 30px 20px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.08);">
         <!-- Full-width Bride Photo -->
         <!-- Thay đổi ảnh cô dâu ở đây: sửa đường dẫn trong src -->
         <div style="position: relative; width: 100%; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); margin-bottom: -30px;" data-aos="fade-up" data-aos-delay="100">
@@ -1457,31 +1950,46 @@
         <h2>Album Hình Cưới</h2>
         <div class="line"></div>
     </div>
-    <div class="gallery-grid">
-        <img src="co dau chu re 1.jpg" data-aos="fade-up">
-        <img src="ảnh 2.jpg" data-aos="fade-up" data-aos-delay="100">
-        <img src="anh 3.jpg" data-aos="fade-up" data-aos-delay="200">
-        <img src="anh 4.jpg" data-aos="fade-up" data-aos-delay="150">
-        <img src="anh 5.jpg" data-aos="fade-up" data-aos-delay="250">
-        <img src="anh 6.jpg" data-aos="fade-up" data-aos-delay="300">
-    </div>
-</div>
-</section>
+            <div class="gallery-grid" id="galleryGrid">
+                <button type="button" class="gallery-item slide-from-left" data-full="co dau chu re 1.jpg" aria-label="Mở ảnh: Album Hình Cưới 1" onclick="openLightbox(this)">
+                    <img src="co dau chu re 1.jpg" alt="Ảnh cưới 1">
+                    <div class="gallery-caption">Khoảnh khắc 01</div>
+                </button>
 
-<!-- Địa điểm tổ chức & Bản đồ định vị -->
-<section style="padding: 40px 20px;">
-<div class="container">
-    <div class="section-title" data-aos="fade-up">
-        <h2>Địa Điểm Tổ Chức</h2>
-        <div class="line"></div>
-    </div>
-    <div class="text-center mb-5" data-aos="fade-up">
-        <h3 style="font-weight: 600; color: var(--accent-gold); letter-spacing: 1px;">Nhà Cô Dâu</h3>
-        <p class="text-muted mt-2" style="font-size: 1.05rem;">133, Ấp Cá Rô, xã Vĩnh Mỹ, Tỉnh Bạc Liêu</p>
-    </div>
-    <div class="map-wrapper shadow-sm" data-aos="zoom-in">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d1704.4301724060972!2d105.624207!3d9.346606!3m2!1i1024!2i768!4f13.1!5e1!3m2!1svi!2sus!4v1781786323276!5m2!1svi!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
+                <button type="button" class="gallery-item slide-from-right" data-full="ảnh 2.jpg" aria-label="Mở ảnh: Album Hình Cưới 2" onclick="openLightbox(this)">
+                    <img src="ảnh 2.jpg" alt="Ảnh cưới 2">
+                    <div class="gallery-caption">Khoảnh khắc 02</div>
+                </button>
+
+                <button type="button" class="gallery-item slide-from-left" data-full="anh 3.jpg" aria-label="Mở ảnh: Album Hình Cưới 3" onclick="openLightbox(this)">
+                    <img src="anh 3.jpg" alt="Ảnh cưới 3">
+                    <div class="gallery-caption">Khoảnh khắc 03</div>
+                </button>
+
+                <button type="button" class="gallery-item slide-from-right" data-full="anh 4.jpg" aria-label="Mở ảnh: Album Hình Cưới 4" onclick="openLightbox(this)">
+                    <img src="anh 4.jpg" alt="Ảnh cưới 4">
+                    <div class="gallery-caption">Khoảnh khắc 04</div>
+                </button>
+
+                <button type="button" class="gallery-item slide-from-left" data-full="anh 5.jpg" aria-label="Mở ảnh: Album Hình Cưới 5" onclick="openLightbox(this)">
+                    <img src="anh 5.jpg" alt="Ảnh cưới 5">
+                    <div class="gallery-caption">Khoảnh khắc 05</div>
+                </button>
+
+                <button type="button" class="gallery-item slide-from-right" data-full="anh 6.jpg" aria-label="Mở ảnh: Album Hình Cưới 6" onclick="openLightbox(this)">
+                    <img src="anh 6.jpg" alt="Ảnh cưới 6">
+                    <div class="gallery-caption">Khoảnh khắc 06</div>
+                </button>
+            </div>
+
+            <div class="album-cta-wrapper" data-aos="fade-up" data-aos-delay="180">
+                <button type="button" class="album-cta-link" onclick="openExternalPage('https://love.tsonit.com/v5z0dhw8777ccoy2')">
+                    <span class="album-cta-icon" aria-hidden="true">💌</span>
+                    <span class="album-cta-text">Xem vũ trụ khoảng khắc <br> Bé Nhõ & Nhựt Huỳnh</span>
+                    <span class="album-cta-hand" aria-hidden="true">👆</span>
+                </button>
+                <p class="album-cta-hint">Bấm vào để mở trang khác</p>
+            </div>
 </div>
 </section>
 
@@ -1560,7 +2068,59 @@ AOS.init({
   mirror: true
 });
 
+// Gallery slide-in animation on scroll
+const galleryObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            // Reset animation by removing and re-adding class
+            entry.target.classList.remove('animate');
+            void entry.target.offsetWidth; // Force reflow
+            entry.target.classList.add('animate');
+        } else {
+            // Remove animate class when out of view
+            entry.target.classList.remove('animate');
+        }
+    });
+}, {
+    threshold: 0.2,
+    rootMargin: '0px 0px -50px 0px'
+});
+
+document.querySelectorAll('.gallery-item.slide-from-left, .gallery-item.slide-from-right').forEach(item => {
+    galleryObserver.observe(item);
+});
+
 const myModal = document.getElementById('customRsvpModal');
+
+function lockPage() {
+    document.body.classList.add('page-blocked');
+    document.body.style.overflow = 'hidden';
+}
+
+function unlockPage() {
+    document.body.classList.remove('page-blocked');
+    document.body.style.overflow = '';
+}
+
+function openExternalPage(url) {
+    const safeUrl = url && /^https:\/\//i.test(url) ? url : 'https://www.google.com';
+    const popup = window.open(safeUrl, '_blank', 'noopener,noreferrer');
+    if (popup) {
+        lockPage();
+    } else {
+        unlockPage();
+    }
+}
+
+window.addEventListener('blur', lockPage);
+window.addEventListener('focus', unlockPage);
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+        lockPage();
+    } else {
+        unlockPage();
+    }
+});
 
 function customOpenModal() {
     stopAutoScroll(); 
@@ -1613,6 +2173,87 @@ function submitRSVP(event) {
     toggleAttendanceDetails('yes_alone'); // Reset trạng thái form động
 }
 
+/* Hiệu ứng tim nhỏ rơi ngẫu nhiên đồng bộ nhịp heartPulse */
+(function initSmallHeartsFall(){
+    const mosaic = document.querySelector('.heart-mosaic');
+    if (!mosaic) return;
+
+    const wrap = document.querySelector('.heart-mosaic-wrap');
+    if (!wrap) return;
+
+    const layer = wrap.querySelector('.small-heart-layer');
+    if (!layer) return;
+
+    const spawn = () => {
+        // rơi tự nhiên (không theo nhịp): lan rộng tới gần 2 mép
+        const count = Math.floor(14 + Math.random() * 10); // ~14-24 (chậm, đẹp)
+        const w = wrap.getBoundingClientRect().width;
+
+        // lan mạnh gần mép trái tim (tính theo container width)
+        const dxMax = Math.max(40, Math.min(200, w * 0.28));
+        // rơi chậm và đều hơn
+        const fallPx = Math.max(260, Math.min(520, w * 0.95));
+
+        // dọn bớt nếu quá nhiều
+        const existing = layer.querySelectorAll('.small-heart');
+        if (existing.length > 80) {
+            existing.forEach((el, idx) => { if (idx < existing.length - 60) el.remove(); });
+        }
+
+        for (let i = 0; i < count; i++) {
+            const el = document.createElement('div');
+            el.className = 'small-heart';
+
+            // nhỏ hơn + tự nhiên hơn
+            const size = 5 + Math.random() * 9; // ~5-14px
+            const scale = 0.65 + Math.random() * 0.35;
+
+            // ưu tiên trải dài đều hai bên
+            // (lệch nhẹ về rìa để nhìn “đầy mép”)
+            const edgeBias = Math.pow(Math.random(), 0.55); // 0..1 (bias về 1)
+            const sign = Math.random() < 0.5 ? -1 : 1;
+            const dx = sign * dxMax * edgeBias;
+
+            const rot = (Math.random() * 2 - 1) * (18 + Math.random() * 18);
+
+            // chậm rãi
+            const dur = 1500 + Math.random() * 1300; // ~1.5-2.8s
+
+            el.style.setProperty('--size', `${size}px`);
+            el.style.setProperty('--scale', `${scale}`);
+            el.style.setProperty('--dx', `${dx}px`);
+            el.style.setProperty('--rot', `${rot}deg`);
+            el.style.setProperty('--dur', `${dur}ms`);
+            el.style.setProperty('--fall', `${fallPx + Math.random() * 60}px`);
+            el.style.setProperty('--pink', `rgba(255, ${105 + Math.floor(Math.random()*50)}, 180, ${0.85 + Math.random()*0.15})`);
+
+            layer.appendChild(el);
+
+            // remove sau animation
+            setTimeout(() => {
+                el.remove();
+            }, dur + 60);
+        }
+    };
+
+    // Không theo nhịp tim: rơi tự nhiên theo interval
+    let alive = true;
+    const tick = () => {
+        if (!alive) return;
+        spawn();
+    };
+
+    // Rơi đều và chậm rãi
+    tick();
+    const intervalId = setInterval(tick, 1600);
+
+    // dọn nếu cần (SPA không có, nhưng giữ an toàn)
+    window.addEventListener('beforeunload', () => {
+        alive = false;
+        clearInterval(intervalId);
+    });
+})();
+        
 // HIỆU ỨNG CÁNH HOA ĐẸP MẮT
 const canvas = document.getElementById('petalCanvas');
 const ctx = canvas.getContext('2d');
@@ -2055,10 +2696,33 @@ const countdownInterval = setInterval(() => {
         document.getElementById('countdownContainer').innerHTML = "<h4 style='color: var(--accent-gold); font-family: var(--font-serif);'>Lễ cưới đã diễn ra!</h4>";
         return;
     }
-    document.getElementById('days').innerText = String(Math.floor(d / 86400000)).padStart(2, '0');
-    document.getElementById('hours').innerText = String(Math.floor((d % 86400000) / 3600000)).padStart(2, '0');
-    document.getElementById('minutes').innerText = String(Math.floor((d % 3600000) / 60000)).padStart(2, '0');
-    document.getElementById('seconds').innerText = String(Math.floor((d % 60000) / 1000)).padStart(2, '0');
+
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+
+    const days = String(Math.floor(d / 86400000)).padStart(2, '0');
+    const hours = String(Math.floor((d % 86400000) / 3600000)).padStart(2, '0');
+    const minutes = String(Math.floor((d % 3600000) / 60000)).padStart(2, '0');
+    const seconds = String(Math.floor((d % 60000) / 1000)).padStart(2, '0');
+
+    daysEl.innerText = days;
+    hoursEl.innerText = hours;
+    minutesEl.innerText = minutes;
+    secondsEl.innerText = seconds;
+
+    // Pop/shine nhẹ mỗi giây để nhìn "sang" hơn
+    const container = document.getElementById('countdownContainer');
+    if(container){
+        const items = container.querySelectorAll('.countdown-item');
+        items.forEach((it) => {
+            it.classList.remove('pop');
+            void it.offsetWidth; // force reflow để animation chạy lại
+            it.classList.add('pop');
+            setTimeout(() => it.classList.remove('pop'), 360);
+        });
+    }
 }, 1000);
 
 // NÚT TRỞ LÊN ĐẦU TRANG
