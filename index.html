@@ -190,6 +190,25 @@
             animation: introCursor 0.7s steps(1) infinite;
             font-weight: 700;
         }
+
+        #invitation-section {
+            padding: 24px 20px 10px;
+        }
+
+        #invitation-section .section-title {
+            margin-bottom: 18px;
+        }
+
+        #invitation-section .container {
+            padding-top: 0;
+            margin-top: 0;
+        }
+
+        #invitation-section .intro-typing {
+            margin-top: 0;
+            min-height: 4.8em;
+            line-height: 1.8;
+        }
         @keyframes introCursor {
             0%, 50% { opacity: 1; }
             51%, 100% { opacity: 0; }
@@ -1897,8 +1916,8 @@
         </div>
         
         <!-- Google Maps -->
-        <div style="border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);" data-aos="zoom-in" data-aos-delay="650">
-           <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3423.797733400863!2d104.85095625263978!3d9.391324870874174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zOcKwMjMnMjcuOSJOIDEwNMKwNTEnMDYuMiJF!5e1!3m2!1svi!2s!4v1782217867992!5m2!1svi!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div style="border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); max-width: 850px; margin: 0 auto;" data-aos="zoom-in" data-aos-delay="650">
+           <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3423.797733400863!2d104.85095625263978!3d9.391324870874174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zOcKwMjMnMjcuOSJOIDEwNMKwNTEnMDYuMiJF!5e1!3m2!1svi!2s!4v1782217867992!5m2!1svi!2s" width="100%" height="300" style="border:0; display:block;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </div>
 
@@ -2107,7 +2126,7 @@ if (introTypingEl) {
         if (i <= introText.length) {
             introTypingEl.textContent = introText.slice(0, i);
             i += 1;
-            const speed = Math.random() * 40 + 35;
+            const speed = Math.random() * 50 + 55;
             setTimeout(typeIntroText, speed);
         }
     }
@@ -2612,7 +2631,7 @@ document.addEventListener('click', () => {
 // LOGIC TỰ ĐỘNG CUỘN TRANG THÔNG MINH
 let autoScrollActive = false;
 let userInteractionTimeout;
-const scrollSpeed = 0.7; 
+const scrollSpeed = 1.0; 
 let scrollAnimationId = null;
 
 function scrollStep() {
@@ -2656,7 +2675,7 @@ function handleUserTouch(event) {
         if (autoScrollActive) {
             startAutoScroll();
         }
-    }, 2500); // Tự động cuộn lại sau 2.5 giây tĩnh lặng
+    }, 1200); // Tự động cuộn lại sau 1.2 giây tĩnh lặng
 }
 
 window.addEventListener('wheel', handleUserTouch, { passive: true });
@@ -3074,15 +3093,14 @@ window.onclick = function(event) {
         <button onclick="closeQRModal()" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: #333; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">&times;</button>
         <h3 style="color: var(--accent-gold); margin-bottom: 20px; font-size: 1.5rem;">Gửi Mừng Cưới</h3>
         <div style="margin-bottom: 20px;">
-            <img src="qr-code-placeholder.png" alt="QR Code" style="width: 200px; height: 200px; object-fit: contain; margin: 0 auto; display: block; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+            <img src="ngân hàng.jpg" alt="QR Code" style="width: 200px; height: 200px; object-fit: contain; margin: 0 auto; display: block; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
         </div>
         <div style="text-align: left; margin-top: 15px;">
-            <p style="margin: 10px 0; color: #333; font-weight: bold;">Ngân hàng: <span style="font-weight: normal;">MB Bank</span></p>
-            <p style="margin: 10px 0; color: #333; font-weight: bold;">Số tài khoản: <span style="font-weight: normal; color: var(--accent-gold);">1234567890</span></p>
-            <p style="margin: 10px 0; color: #333; font-weight: bold;">Chủ tài khoản: <span style="font-weight: normal;">TRƯƠNG VĂN ÚT</span></p>
+            <p style="margin: 10px 0; color: #333; font-weight: bold;">Ngân hàng: <span style="font-weight: normal;">BIDV</span></p>
+            <p style="margin: 10px 0; color: #333; font-weight: bold;">Số tài khoản: <span style="font-weight: normal; color: var(--accent-gold);">7850475539</span></p>
+            <p style="margin: 10px 0; color: #333; font-weight: bold;">Chủ tài khoản: <span style="font-weight: normal;">TRƯƠNG THỊ BÉ NHÕ</span></p>
         </div>
         <p style="margin-top: 15px; color: #888; font-size: 0.8rem; white-space: nowrap;">Cảm ơn sự quan tâm và chúc phúc của quý khách!</p>
-        <button onclick="window.open('https://www.mbbank.com.vn', '_blank')" style="margin-top: 15px; background: var(--accent-gold); color: white; border: none; padding: 8px 20px; font-size: 0.85rem; font-weight: bold; border-radius: 20px; cursor: pointer; transition: all 0.3s;">Chuyển đến ngân hàng</button>
     </div>
 </div>
 
@@ -3092,22 +3110,21 @@ window.onclick = function(event) {
         <button onclick="closeQRModal2()" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: #333; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">&times;</button>
         <h3 style="color: var(--accent-gold); margin-bottom: 20px; font-size: 1.5rem;">Gửi Mừng Cưới</h3>
         <div style="margin-bottom: 20px;">
-            <img src="qr-code-placeholder.png" alt="QR Code" style="width: 200px; height: 200px; object-fit: contain; margin: 0 auto; display: block; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+            <img src="ngân hàng.jpg" alt="QR Code" style="width: 200px; height: 200px; object-fit: contain; margin: 0 auto; display: block; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
         </div>
         <div style="text-align: left; margin-top: 15px;">
-            <p style="margin: 10px 0; color: #333; font-weight: bold;">Ngân hàng: <span style="font-weight: normal;">Vietcombank</span></p>
-            <p style="margin: 10px 0; color: #333; font-weight: bold;">Số tài khoản: <span style="font-weight: normal; color: var(--accent-gold);">0987654321</span></p>
-            <p style="margin: 10px 0; color: #333; font-weight: bold;">Chủ tài khoản: <span style="font-weight: normal;">TÔ ẤP LĂNG</span></p>
+            <p style="margin: 10px 0; color: #333; font-weight: bold;">Ngân hàng: <span style="font-weight: normal;">BIDV</span></p>
+            <p style="margin: 10px 0; color: #333; font-weight: bold;">Số tài khoản: <span style="font-weight: normal; color: var(--accent-gold);">7850475539</span></p>
+            <p style="margin: 10px 0; color: #333; font-weight: bold;">Chủ tài khoản: <span style="font-weight: normal;">TRƯƠNG THỊ BÉ NHÕ</span></p>
         </div>
         <p style="margin-top: 15px; color: #888; font-size: 0.8rem; white-space: nowrap;">Cảm ơn sự quan tâm và chúc phúc của quý khách!</p>
-        <button onclick="window.open('https://www.vcb.com.vn', '_blank')" style="margin-top: 15px; background: var(--accent-gold); color: white; border: none; padding: 8px 20px; font-size: 0.85rem; font-weight: bold; border-radius: 20px; cursor: pointer; transition: all 0.3s;">Chuyển đến ngân hàng</button>
     </div>
 </div>
 
 <style>
 @keyframes fadeIn {
     from { opacity: 0; }
-    to { opacity: 1; }
+    to { opacity: 1; };
 }
 
 @keyframes scaleIn {
