@@ -290,6 +290,12 @@
             transition: background-color 4.8s ease;
         }
 
+        #petalCanvas,
+        #continuousPetalCanvas,
+        #smokeCanvas {
+            will-change: transform, opacity;
+        }
+
         #petalCanvas {
             position: absolute;
             top: 0;
@@ -397,17 +403,21 @@
         /* Video background (covers hero) */
         .hero-video {
             position: absolute;
-            top: 0;
-            left: 0;
+            inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center;
             background-color: #10080d;
             border: 0;
             z-index: 0;
             pointer-events: none;
             opacity: 1;
-            transition: opacity .45s ease;
+            transition: opacity .45s ease, filter .45s ease;
+        }
+
+        .hero-video[poster] {
+            object-fit: cover;
         }
 
         .hero.video-started .hero-video {
@@ -903,10 +913,12 @@
             width: 100%;
             height: 100%;
             display: block;
-            object-fit: cover;
+            object-fit: contain;
+            object-position: center;
             aspect-ratio: 4 / 3;
             transition: transform .5s ease, filter .5s ease;
             filter: saturate(1.04) contrast(1.02);
+            transform: none;
         }
 
         .gallery-item::after {
@@ -919,17 +931,6 @@
             transition: opacity .25s ease;
             pointer-events: none;
             animation: galleryShine 2s ease-in-out infinite;
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: cover;
-            aspect-ratio: 4 / 3;
-            transition: transform .5s ease, filter .5s ease;
-            filter: saturate(1.12) contrast(1.04);
-            transform: scale(1.06);
         }
 
         @keyframes galleryShine {
@@ -975,7 +976,7 @@
 
             to {
                 opacity: 1;
-                transform: translateX(0) scale(1.06);
+                transform: translateX(0);
             }
         }
 
@@ -987,7 +988,7 @@
 
             to {
                 opacity: 1;
-                transform: translateX(0) scale(1.06);
+                transform: translateX(0);
             }
         }
 
@@ -2093,6 +2094,36 @@
             background-size: 34px 34px, 42px 42px, auto;
         }
 
+        .site-footer {
+            width: 100%;
+            padding: 42px 20px;
+            text-align: center;
+            background: #fff;
+            border-top: 1px solid rgba(197, 168, 106, 0.24);
+            box-sizing: border-box;
+        }
+
+        .footer-title {
+            margin: 0 0 10px;
+            color: var(--accent-gold);
+            font-family: var(--font-cursive-sub);
+            font-size: clamp(2.2rem, 7vw, 3.4rem);
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .footer-message {
+            max-width: 620px;
+            margin: 0 auto;
+            color: #666;
+            font-size: clamp(0.78rem, 2.2vw, 0.9rem);
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            line-height: 1.8;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+
         .guest-comments-box {
             max-width: 680px;
             margin: 0 auto;
@@ -2374,11 +2405,10 @@
                 <select id="musicSelect">
                     <option value="7949048808967.mp3">Lễ đường</option>
                     <option value="một-đời.mp3">Một đời</option>
-                    <option value="mai-mai-ben-nhau.mp3">Mãi mãi bên nhau</option>
-                    <option value="mot-nhà.mp3">Một nhà</option>
-                    <option value="ngày-đầu-tiên.mp3">Ngày đầu tiên</option>
-                    <option value="Ta-là-của-nhau.mp3">Ta là của nhau</option>
-                    <option value="Em-đồng-ý.mp3">Em đồng ý (i do)</option>
+                    <option value="Ngày đầu tiên.mp3">Ngày đầu tiên</option>
+                    <option value="Dù cho tận thế.mp3">Dù cho tận thế</option>
+                    <option value="Váy cưới.mp3">Váy cưới</option>
+                    <option value="yêu em hơn từng ngày.mp3">Yêu em hơn từng ngày</option>
                 </select>
                 <button id="musicDropdownBtn" class="music-dropdown-btn" aria-label="Mở danh sách bài">▼</button>
             </div>
@@ -2387,18 +2417,18 @@
 
     <!-- Hero Banner Mở đầu -->
     <section class="hero" id="hero-section">
-        <!-- Background video from YouTube -->
-        <video autoplay muted loop playsinline webkit-playsinline preload="auto" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
-    <source src="background.mp4" type="video/mp4">
-    Trình duyệt của bạn không hỗ trợ thẻ video.
-</video>
-        <button id="heroVideoBtn" class="hero-video-btn" aria-label="Bật tiếng video">♪</button>
+        <!-- Video nền phủ đầy màn hình -->
+        <video id="heroVideo" class="hero-video" autoplay muted loop playsinline webkit-playsinline preload="auto" poster="anh 3.jpg">
+            <source src="background.mp4" type="video/mp4">
+            Trình duyệt của bạn không hỗ trợ thẻ video.
+        </video>
+        <button id="heroVideoBtn" class="hero-video-btn" aria-label="Tạm dừng video">Ⅱ</button>
         <div class="hero-content" data-aos="fade-up" data-aos-duration="1800">
             <!-- Desktop version (keeps original layout) -->
             <div class="desktop-invite">
                 <p>Wedding Invitation</p>
                 <h1>Bé Nhõ<br>& <br> Nhựt Huỳnh</h1>
-                <p class="mb-0" style="font-size: 1.3rem; letter-spacing: 4px; color: #fceecb;">24&25 . 06 . 2026</p>
+                <p class="mb-0" style="font-size: 1.3rem; letter-spacing: 4px; color: #fceecb;">07&08 . 11 . 2026</p>
             </div>
 
             <!-- Mobile-only stylized version -->
@@ -2406,7 +2436,7 @@
                 <p class="invite-small">Thư Mời Cưới</p>
                 <h1 class="invite-names">Bé Nhõ &amp; Nhựt Huỳnh</h1>
                 <div class="invite-date">
-                    <div class="date-top">24&25.06</div>
+                    <div class="date-top">07&08.11</div>
                     <div class="date-year">2026</div>
                 </div>
             </div>
@@ -2552,7 +2582,7 @@
                 <!-- Thay đổi ảnh cô dâu ở đây: sửa đường dẫn trong src -->
                 <div style="position: relative; width: 100%; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); margin-bottom: -30px;"
                     data-aos="fade-up" data-aos-delay="100">
-                    <img src="co-dau-chu-re-chibi-02.webp" alt="Cô Dâu"
+                    <img src="anhcuoi1.jpg" alt="Cô Dâu"
                         style="width: 100%; height: 400px; object-fit: cover;">
 
                     <!-- Blur Overlay at Bottom -->
@@ -2611,7 +2641,7 @@
                 <!-- Thay đổi ảnh cô dâu ở đây: sửa đường dẫn trong src -->
                 <div style="position: relative; width: 100%; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); margin-bottom: -30px;"
                     data-aos="fade-up" data-aos-delay="100">
-                    <img src="anhcodauchure2.webp" alt="Cô Dâu" style="width: 100%; height: 400px; object-fit: cover;">
+                    <img src="anhcuoi2.jpg" alt="Cô Dâu" style="width: 100%; height: 400px; object-fit: cover;">
 
                     <!-- Blur Overlay at Bottom -->
                     <div
@@ -2745,39 +2775,39 @@
                 <div class="line"></div>
             </div>
             <div class="gallery-grid" id="galleryGrid">
-                <button type="button" class="gallery-item slide-from-left" data-full="co dau chu re 1.jpg"
+                <button type="button" class="gallery-item slide-from-left" data-full="anhcuoi3.jpg"
                     aria-label="Mở ảnh: Album Hình Cưới 1" onclick="openLightbox(this)">
-                    <img src="co dau chu re 1.jpg" alt="Ảnh cưới 1">
+                    <img src="anhcuoi3.jpg" alt="Ảnh cưới 1">
                     <div class="gallery-caption">Khoảnh khắc 01</div>
                 </button>
 
-                <button type="button" class="gallery-item slide-from-right" data-full="ảnh 2.jpg"
+                <button type="button" class="gallery-item slide-from-right" data-full="anhcuoi4.jpg"
                     aria-label="Mở ảnh: Album Hình Cưới 2" onclick="openLightbox(this)">
-                    <img src="ảnh 2.jpg" alt="Ảnh cưới 2">
+                    <img src="anhcuoi4.jpg" alt="Ảnh cưới 2">
                     <div class="gallery-caption">Khoảnh khắc 02</div>
                 </button>
 
-                <button type="button" class="gallery-item slide-from-left" data-full="anh 3.jpg"
+                <button type="button" class="gallery-item slide-from-left" data-full="anhcuoi5.jpg"
                     aria-label="Mở ảnh: Album Hình Cưới 3" onclick="openLightbox(this)">
-                    <img src="anh 3.jpg" alt="Ảnh cưới 3">
+                    <img src="anhcuoi5.jpg" alt="Ảnh cưới 3">
                     <div class="gallery-caption">Khoảnh khắc 03</div>
                 </button>
 
-                <button type="button" class="gallery-item slide-from-right" data-full="anh 4.jpg"
+                <button type="button" class="gallery-item slide-from-right" data-full="anhcuoi6.jpg"
                     aria-label="Mở ảnh: Album Hình Cưới 4" onclick="openLightbox(this)">
-                    <img src="anh 4.jpg" alt="Ảnh cưới 4">
+                    <img src="anhcuoi6.jpg" alt="Ảnh cưới 4">
                     <div class="gallery-caption">Khoảnh khắc 04</div>
                 </button>
 
-                <button type="button" class="gallery-item slide-from-left" data-full="anh 5.jpg"
+                <button type="button" class="gallery-item slide-from-left" data-full="anhcuoi7.jpg"
                     aria-label="Mở ảnh: Album Hình Cưới 5" onclick="openLightbox(this)">
-                    <img src="anh 5.jpg" alt="Ảnh cưới 5">
+                    <img src="anhcuoi7.jpg" alt="Ảnh cưới 5">
                     <div class="gallery-caption">Khoảnh khắc 05</div>
                 </button>
 
-                <button type="button" class="gallery-item slide-from-right" data-full="anh 6.jpg"
+                <button type="button" class="gallery-item slide-from-right" data-full="anhcuoi8.jpg"
                     aria-label="Mở ảnh: Album Hình Cưới 6" onclick="openLightbox(this)">
-                    <img src="anh 6.jpg" alt="Ảnh cưới 6">
+                    <img src="anhcuoi8.jpg" alt="Ảnh cưới 6">
                     <div class="gallery-caption">Khoảnh khắc 06</div>
                 </button>
             </div>
@@ -2786,10 +2816,10 @@
                 <button type="button" class="album-cta-link"
                             onclick="window.location.href='index1.html?v=20261005-1'">
                     <span class="album-cta-icon" aria-hidden="true">💌</span>
-                    <span class="album-cta-text">Xem vũ trụ khoảng khắc <br> Bé Nhõ & Nhựt Huỳnh</span>
+                    <span class="album-cta-text">Xem vũ trụ ảnh<br> Bé Nhõ & Nhựt Huỳnh</span>
                     <span class="album-cta-hand" aria-hidden="true">👆</span>
                 </button>
-                <p class="album-cta-hint">Bấm vào để mở trang khác</p>
+                <p class="album-cta-hint">Bấm vào để mở album ảnh</p>
             </div>
         </div>
     </section>
@@ -2859,16 +2889,6 @@
             </form>
         </div>
     </div>
-
-    <!-- Chân trang trang trọng -->
-    <footer class="py-5 text-center bg-white border-top">
-        <h2
-            style="font-family: var(--font-cursive-sub); color: var(--accent-gold); font-size: 2.8rem; font-weight:700;">
-            Thank You</h2>
-        <p style="letter-spacing: 2px; font-size: 0.85rem; color:#666;" class="mt-2 px-3">Sự hiện diện của quý khách là
-            niềm vinh hạnh lớn cho gia đình chúng tôi!</p>
-    </footer>
-
     <!-- Khung lời chúc của khách -->
     <section class="guest-comments-section" aria-labelledby="guestCommentsTitle">
         <div class="section-title" data-aos="fade-up">
@@ -2907,6 +2927,11 @@
         </div>
     </section>
 
+    <!-- Chân trang trang trọng -->
+    <footer class="site-footer">
+        <h2 class="footer-title">Thank You</h2>
+        <p class="footer-message">Sự hiện diện của quý khách là niềm vinh hạnh lớn cho gia đình chúng tôi!</p>
+    </footer>
     <!-- AOS Animation JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
@@ -3106,11 +3131,25 @@
                 : 'Tin mới nhất';
         }
 
+        function getCommentTimestamp(comment) {
+            const value = comment.created_at;
+            if (value && typeof value.toDate === 'function') {
+                return value.toDate().getTime();
+            }
+            if (value instanceof Date) {
+                return value.getTime();
+            }
+            const parsed = Date.parse(String(value || ''));
+            return Number.isNaN(parsed) ? 0 : parsed;
+        }
+
         function renderComments(comments) {
             const keepPosition = !isCommentsAtBottom();
             const previousScrollTop = commentsList.scrollTop;
             commentsList.innerHTML = '';
-            comments.forEach(comment => {
+            [...comments]
+                .sort((a, b) => getCommentTimestamp(a) - getCommentTimestamp(b))
+                .forEach(comment => {
                 const item = document.createElement('article');
                 item.className = 'comment-item';
                 const author = document.createElement('strong');
@@ -3119,7 +3158,16 @@
                 message.textContent = comment.message;
                 const time = document.createElement('small');
                 time.className = 'comment-time';
-                time.textContent = comment.created_at ? new Date(comment.created_at).toLocaleString('vi-VN') : '';
+                const createdAt = comment.created_at && typeof comment.created_at.toDate === 'function'
+                    ? comment.created_at.toDate()
+                    : new Date(comment.created_at || Date.now());
+                if (!Number.isNaN(createdAt.getTime())) {
+                    time.dateTime = createdAt.toISOString();
+                    time.textContent = createdAt.toLocaleString('vi-VN', {
+                        dateStyle: 'full',
+                        timeStyle: 'medium'
+                    });
+                }
                 item.append(author, message, time);
                 commentsList.appendChild(item);
             });
@@ -3141,7 +3189,7 @@
                 const snapshot = await getDocs(collection(db, 'guest_comments'));
                 const comments = snapshot.docs
                     .map(doc => ({ id: doc.id, ...doc.data() }))
-                    .sort((a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0));
+                    .sort((a, b) => getCommentTimestamp(a) - getCommentTimestamp(b));
                 const newComments = comments.filter(comment => !knownCommentIds.has(String(comment.id)));
                 const wasAtBottom = isCommentsAtBottom();
                 knownCommentIds = new Set(comments.map(comment => String(comment.id)));
@@ -3193,6 +3241,7 @@
                     commentStatus.textContent = 'Lời chúc của bạn đã được gửi lên Firestore.';
                     pendingCommentCount = 0;
                     await loadComments();
+                    commentsList.scrollTo({ top: commentsList.scrollHeight, behavior: 'smooth' });
                 } catch (error) {
                     commentStatus.textContent = error.message || 'Chưa thể gửi lời chúc. Vui lòng thử lại sau.';
                     console.error(error);
@@ -3311,7 +3360,11 @@
         });
 
         const petalArray = [];
-        const maxPetals = 70;
+        const maxPetals = 36;
+        let petalAnimationFrameId = null;
+        let petalAnimationRunning = false;
+        let petalLastFrameTime = 0;
+        const petalFrameInterval = 1000 / 30;
 
         class Petal {
             constructor() {
@@ -3360,17 +3413,42 @@
             petalArray.push(new Petal());
         }
 
-        function animatePetals() {
+        function animatePetals(now) {
+            petalAnimationFrameId = null;
+            if (!petalAnimationRunning || document.hidden) return;
+
+            if (now - petalLastFrameTime < petalFrameInterval) {
+                petalAnimationFrameId = requestAnimationFrame(animatePetals);
+                return;
+            }
+            petalLastFrameTime = now;
             ctx.clearRect(0, 0, wm, hm);
             petalArray.forEach(p => p.update());
-            requestAnimationFrame(animatePetals);
+            petalAnimationFrameId = requestAnimationFrame(animatePetals);
         }
-        animatePetals();
+
+        function startPetalAnimation() {
+            if (petalAnimationRunning) return;
+            petalAnimationRunning = true;
+            petalLastFrameTime = performance.now() - petalFrameInterval;
+            petalAnimationFrameId = requestAnimationFrame(animatePetals);
+        }
+
+        function stopPetalAnimation() {
+            petalAnimationRunning = false;
+            if (petalAnimationFrameId !== null) {
+                cancelAnimationFrame(petalAnimationFrameId);
+                petalAnimationFrameId = null;
+            }
+        }
+
+        startPetalAnimation();
 
         // HIỆU ỨNG HOA RƠI LIÊN TỤC CHO TOÀN TRANG
         let continuousPetalCanvas, continuousCtx;
         let continuousPetals = [];
         let continuousAnimationId = null;
+        let continuousAnimationRunning = false;
         let cw, ch;
 
         function startContinuousFallingPetals() {
@@ -3385,11 +3463,12 @@
 
             continuousPetalCanvas.classList.add('active');
 
-            // Tạo các cánh hoa ban đầu
-            for (let i = 0; i < 50; i++) {
+            // Giảm số cánh để kiểm soát CPU/GPU trên màn hình di động
+            for (let i = 0; i < 22; i++) {
                 continuousPetals.push(createContinuousPetal());
             }
 
+            continuousAnimationRunning = true;
             animateContinuousPetals();
         }
 
@@ -3424,14 +3503,15 @@
         }
 
         function animateContinuousPetals() {
-            continuousCtx.clearRect(0, 0, cw, ch);
+            continuousAnimationId = null;
+            if (!continuousAnimationRunning || document.hidden) return;
 
+            continuousCtx.clearRect(0, 0, cw, ch);
             continuousPetals.forEach(p => {
                 p.y += p.speedY;
                 p.x += p.speedX + Math.sin(p.y / 60) * 0.3;
                 p.angle += p.spin;
 
-                // Reset khi ra khỏi màn hình
                 if (p.y > ch + 20 || p.x > cw + 20 || p.x < -20) {
                     p.x = Math.random() * cw;
                     p.y = -20;
@@ -3518,6 +3598,11 @@
         }
 
         function animateSmoke(now) {
+            if (document.hidden) {
+                requestAnimationFrame(animateSmoke);
+                return;
+            }
+
             smokeCtx.clearRect(0, 0, smokeW, smokeH);
             smokeCtx.globalCompositeOperation = 'source-over';
 
@@ -3756,58 +3841,54 @@
         let heroVideoPlaybackRequested = false;
         let heroVideoPlaying = false;
 
-        function sendHeroVideoCommand(command) {
-            if (!heroVideo?.contentWindow) return;
-            heroVideo.contentWindow.postMessage(
-                JSON.stringify({ event: 'command', func: command, args: [] }),
-                '*'
-            );
+        function syncHeroVideoButton() {
+            if (!heroVideoButton) return;
+            heroVideoPlaying = !heroVideo.paused && !heroVideo.ended;
+            heroVideoButton.textContent = heroVideoPlaying ? 'Ⅱ' : '▶';
+            heroVideoButton.setAttribute('aria-label', heroVideoPlaying ? 'Tạm dừng video' : 'Phát video');
         }
 
-        function showHeroVideo() {
-            heroVideoPlaybackRequested = true;
-            heroVideoPlaying = true;
-            document.getElementById('hero-section')?.classList.add('video-started');
-            if (heroVideoButton) {
-                heroVideoButton.textContent = '♪';
-                heroVideoButton.setAttribute('aria-label', 'Tắt tiếng video');
-                heroVideoButton.classList.remove('hidden');
-            }
-        }
-
-        function playHeroVideo() {
+        async function playHeroVideo() {
             if (!heroVideo) return;
             heroVideoPlaybackRequested = true;
             document.getElementById('hero-section')?.classList.add('video-started');
-            sendHeroVideoCommand('playVideo');
+            try {
+                await heroVideo.play();
+                syncHeroVideoButton();
+            } catch (error) {
+                heroVideoPlaying = false;
+                syncHeroVideoButton();
+                console.warn('Không thể phát video nền:', error);
+            }
         }
 
         function pauseHeroVideo() {
+            if (!heroVideo) return;
+            heroVideo.pause();
             heroVideoPlaying = false;
-            sendHeroVideoCommand('pauseVideo');
+            syncHeroVideoButton();
         }
 
-        window.addEventListener('message', (event) => {
-            if (!heroVideo || event.source !== heroVideo.contentWindow) return;
-            try {
-                const data = JSON.parse(event.data);
-                if (data.event !== 'onStateChange') return;
-                if (data.info === 1) showHeroVideo();
-                if (data.info === 2) {
-                    heroVideoPlaying = false;
-                    if (heroVideoButton) {
-                        heroVideoButton.textContent = '▶';
-                        heroVideoButton.setAttribute('aria-label', 'Phát video');
-                    }
-                }
-            } catch {
-                // Ignore messages that are not YouTube player events.
+        function toggleHeroVideo() {
+            if (!heroVideo) return;
+            if (heroVideo.paused || heroVideo.ended) {
+                playHeroVideo();
+            } else {
+                pauseHeroVideo();
             }
+        }
+
+        heroVideo?.addEventListener('play', syncHeroVideoButton);
+        heroVideo?.addEventListener('pause', syncHeroVideoButton);
+        heroVideo?.addEventListener('ended', syncHeroVideoButton);
+        heroVideo?.addEventListener('error', () => {
+            heroVideoPlaying = false;
+            syncHeroVideoButton();
         });
 
         document.addEventListener('visibilitychange', () => {
-            if (!heroVideoPlaybackRequested) return;
-            if (document.visibilityState === 'visible' && !heroVideoPlaying) {
+            if (!heroVideoPlaybackRequested || !heroVideo) return;
+            if (document.visibilityState === 'visible' && heroVideo.paused && !heroVideo.ended) {
                 playHeroVideo();
             }
         });
@@ -3919,16 +4000,7 @@
             heroVideoButton.classList.remove('hidden');
             heroVideoButton.addEventListener('click', (event) => {
                 event.stopPropagation();
-                if (heroVideoPlaying) {
-                    pauseHeroVideo();
-                    if (heroVideoButton) {
-                        heroVideoButton.textContent = '▶';
-                        heroVideoButton.setAttribute('aria-label', 'Phát video');
-                    }
-                    return;
-                }
-
-                playHeroVideo();
+                toggleHeroVideo();
             });
         }
 
@@ -4062,8 +4134,6 @@
             if (!celebrationActive) return;
 
             celebrationCtx.clearRect(0, 0, celebrationCanvas.width, celebrationCanvas.height);
-
-            console.log('Animating frame, particles:', particles.length, 'blossoms:', cherryBlossoms.length);
 
             // Update and draw cherry blossoms
             cherryBlossoms.forEach(blossom => {
