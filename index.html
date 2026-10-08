@@ -41,10 +41,19 @@
             align-items: center;
             justify-content: center;
             background: transparent;
+            -webkit-appearance: none;
+            appearance: none;
+            border: 0;
+            padding: 0;
+            color: inherit;
+            font: inherit;
+            text-align: inherit;
+            cursor: pointer;
             -webkit-tap-highlight-color: transparent;
         }
 
         .tap-cover {
+            display: block;
             width: min(420px, 86vw);
             aspect-ratio: 3 / 4;
             border-radius: 28px;
@@ -130,9 +139,41 @@
             }
         }
 
-        /* bỏ chữ Tap */
         .tap-cover-hint {
-            display: none !important;
+            position: absolute;
+            left: 50%;
+            bottom: 24px;
+            transform: translateX(-50%);
+            max-width: calc(100% - 32px);
+            padding: 10px 16px;
+            border: 1px solid rgba(255, 255, 255, .3);
+            border-radius: 4px;
+            background: rgba(18, 10, 14, .68);
+            color: #fff;
+            font-family: var(--font-sans);
+            font-size: 13px;
+            line-height: 1.4;
+            text-align: center;
+            white-space: nowrap;
+            pointer-events: none;
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            animation: tapPromptPulse 1.8s ease-in-out infinite;
+        }
+
+        .tap-cover-hint::after {
+            content: 'Chạm để mở thiệp';
+        }
+
+        @keyframes tapPromptPulse {
+            0%,
+            100% {
+                opacity: .7;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
 
@@ -162,6 +203,13 @@
             color: var(--primary-dark);
             font-family: var(--font-sans);
             -webkit-overflow-scrolling: touch;
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: 100svh;
+            min-height: 100dvh;
+            -webkit-text-size-adjust: 100%;
         }
 
         /* Typography */
@@ -214,7 +262,7 @@
 
             /* Giải pháp cốt lõi cho Zalo/Messenger: dùng dvh thay cho vh */
             height: 100vh;
-            /* Dự phòng cho các trình duyệt quá cũ */
+            height: 100svh;
             height: 100dvh;
             /* Tự động co giãn theo thanh công cụ động của Zalo/Mess */
 
@@ -238,6 +286,8 @@
 
         #welcome.opening {
             background-color: rgba(16, 8, 13, 0);
+            pointer-events: none;
+            transition: background-color 4.8s ease;
         }
 
         #petalCanvas {
@@ -323,6 +373,11 @@
         /* Hero Section */
         .hero {
             height: 100vh;
+            height: 100svh;
+            height: 100dvh;
+            min-height: 100vh;
+            min-height: 100svh;
+            min-height: 100dvh;
             position: relative;
             background: #10080d;
             display: flex;
@@ -333,7 +388,9 @@
 
         @media (max-width: 768px) {
             .hero {
-                height: 50vh;
+                height: 100vh;
+                height: 100svh;
+                height: 100dvh;
             }
         }
 
@@ -345,10 +402,12 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            background-color: #10080d;
+            border: 0;
             z-index: 0;
             pointer-events: none;
-            opacity: 0;
-            transition: opacity 1.8s ease;
+            opacity: 1;
+            transition: opacity .45s ease;
         }
 
         .hero.video-started .hero-video {
@@ -2293,12 +2352,12 @@
 
     <!-- Canvas cho hiệu ứng hoa rơi liên tục -->
     <canvas id="continuousPetalCanvas"></canvas>
-    <div id="tapCoverWrap" class="tap-cover-wrap" role="button" tabindex="0" aria-label="Chạm để mở thiệp và bật nhạc">
-        <div class="tap-cover">
-            <div class="tap-cover-glow"></div>
-            <div class="tap-cover-hint" aria-hidden="true"></div>
-        </div>
-    </div>
+    <button id="tapCoverWrap" class="tap-cover-wrap" type="button" aria-label="Mở thiệp và phát video">
+        <span class="tap-cover">
+            <span class="tap-cover-glow"></span>
+            <span class="tap-cover-hint" aria-hidden="true"></span>
+        </span>
+    </button>
 
     <!-- Thành phần Nhạc nền ẩn -->
     <audio id="music"></audio>
@@ -2328,12 +2387,12 @@
 
     <!-- Hero Banner Mở đầu -->
     <section class="hero" id="hero-section">
-        <!-- Video background (place your video file 'background.mp4' in the same folder or change the src) -->
-        <video id="heroVideo" class="hero-video" muted loop playsinline preload="auto">
-            <source src="background.mp4" type="video/mp4">
-            <!-- Fallback text -->
-        </video>
-        <button id="heroVideoBtn" class="hero-video-btn" aria-label="Play video">▶</button>
+        <!-- Background video from YouTube -->
+        <video autoplay muted loop playsinline webkit-playsinline preload="auto" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+    <source src="background.mp4" type="video/mp4">
+    Trình duyệt của bạn không hỗ trợ thẻ video.
+</video>
+        <button id="heroVideoBtn" class="hero-video-btn" aria-label="Bật tiếng video">♪</button>
         <div class="hero-content" data-aos="fade-up" data-aos-duration="1800">
             <!-- Desktop version (keeps original layout) -->
             <div class="desktop-invite">
@@ -2725,7 +2784,7 @@
 
             <div class="album-cta-wrapper" data-aos="fade-up" data-aos-delay="180">
                 <button type="button" class="album-cta-link"
-                    onclick="openExternalPage('https://love.tsonit.com/v5z0dhw8777ccoy2')">
+                            onclick="window.location.href='index1.html?v=20261005-1'">
                     <span class="album-cta-icon" aria-hidden="true">💌</span>
                     <span class="album-cta-text">Xem vũ trụ khoảng khắc <br> Bé Nhõ & Nhựt Huỳnh</span>
                     <span class="album-cta-hand" aria-hidden="true">👆</span>
@@ -2852,13 +2911,16 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
     <script>
-        AOS.init({
-            duration: 1000,
-            once: false,
-            mirror: true,
-            offset: 100,
-            delay: 0
-        });
+        document.addEventListener('DOMContentLoaded', () => {
+        if (window.AOS) {
+            AOS.init({
+                duration: 1000,
+                once: false,
+                mirror: true,
+                offset: 100,
+                delay: 0
+            });
+        }
 
         const introText = `"Tình yêu bước vào đời sống của chúng ta tựa như một phép màu. Nó gắn kết hai tâm hồn xa lạ xích lại gần nhau hơn, hòa chung một nhịp đập."\n"..."\nChúng tôi rất hân hạnh được đón tiếp quý khách đến tham dự, chung vui và chia sẻ khoảnh khắc hạnh phúc trọn vẹn tại lễ thành hôn của chúng tôi.`;
         const introTypingEl = document.getElementById('introTypingText');
@@ -3083,13 +3145,18 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ action: 'comment', name, side, message })
                     });
-                    if (!response.ok) throw new Error('Comment request failed');
+                    const result = await response.json().catch(() => null);
+                    if (!response.ok) {
+                        throw new Error(result?.error || `Máy chủ trả về lỗi HTTP ${response.status}.`);
+                    }
                     document.getElementById('commentMessage').value = '';
                     commentStatus.textContent = 'Lời chúc của bạn đã được gửi.';
                     pendingCommentCount = 0;
                     loadComments();
                 } catch (error) {
-                    commentStatus.textContent = 'Chưa thể gửi lời chúc. Vui lòng mở trang bằng Laragon rồi thử lại.';
+                    commentStatus.textContent = error instanceof TypeError
+                        ? 'Không kết nối được comments.php. Kiểm tra đường dẫn trang và PHP trên hosting.'
+                        : error.message || 'Chưa thể gửi lời chúc. Vui lòng thử lại sau.';
                 }
             });
             commentsList.addEventListener('scroll', () => {
@@ -3589,24 +3656,20 @@
         let userInteractionTimeout;
         const scrollSpeed = 1.5;
         let scrollAnimationId = null;
-        let lastAOSRefresh = 0;
+        let previousScrollFrame = 0;
 
-        function scrollStep() {
+        function scrollStep(timestamp) {
             if (!autoScrollActive) return;
 
             if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
                 autoScrollActive = false;
+                scrollAnimationId = null;
                 return;
             }
 
-            window.scrollBy(0, scrollSpeed);
-
-            // Kích hoạt AOS khi auto-scroll (mỗi 150ms để tránh hiệu suất kém)
-            const now = Date.now();
-            if (typeof AOS !== 'undefined' && now - lastAOSRefresh > 150) {
-                AOS.refreshHard();
-                lastAOSRefresh = now;
-            }
+            const elapsed = previousScrollFrame ? Math.min(timestamp - previousScrollFrame, 50) : 16.67;
+            previousScrollFrame = timestamp;
+            window.scrollBy(0, scrollSpeed * elapsed / 16.67);
 
             scrollAnimationId = requestAnimationFrame(scrollStep);
         }
@@ -3614,6 +3677,7 @@
         function startAutoScroll() {
             if (!autoScrollActive) return;
             if (!scrollAnimationId) {
+                previousScrollFrame = 0;
                 scrollAnimationId = requestAnimationFrame(scrollStep);
             }
         }
@@ -3623,6 +3687,7 @@
                 cancelAnimationFrame(scrollAnimationId);
                 scrollAnimationId = null;
             }
+            previousScrollFrame = 0;
         }
 
         function handleUserTouch(event) {
@@ -3630,7 +3695,7 @@
             if (event.type === 'wheel' && event.deltaY < 0) {
                 stopAutoScroll();
                 autoScrollActive = false;
-                AOS.refresh();
+                if (window.AOS) AOS.refresh();
                 return;
             }
             stopAutoScroll();
@@ -3647,23 +3712,75 @@
         window.addEventListener('touchstart', handleUserTouch, { passive: true });
         window.addEventListener('touchmove', handleUserTouch, { passive: true });
 
+        const heroVideo = document.getElementById('heroVideo');
+        const heroVideoButton = document.getElementById('heroVideoBtn');
+        let heroVideoPlaybackRequested = false;
+        let heroVideoPlaying = false;
+
+        function sendHeroVideoCommand(command) {
+            if (!heroVideo?.contentWindow) return;
+            heroVideo.contentWindow.postMessage(
+                JSON.stringify({ event: 'command', func: command, args: [] }),
+                '*'
+            );
+        }
+
+        function showHeroVideo() {
+            heroVideoPlaybackRequested = true;
+            heroVideoPlaying = true;
+            document.getElementById('hero-section')?.classList.add('video-started');
+            if (heroVideoButton) {
+                heroVideoButton.textContent = '♪';
+                heroVideoButton.setAttribute('aria-label', 'Tắt tiếng video');
+                heroVideoButton.classList.remove('hidden');
+            }
+        }
+
+        function playHeroVideo() {
+            if (!heroVideo) return;
+            heroVideoPlaybackRequested = true;
+            document.getElementById('hero-section')?.classList.add('video-started');
+            sendHeroVideoCommand('playVideo');
+        }
+
+        function pauseHeroVideo() {
+            heroVideoPlaying = false;
+            sendHeroVideoCommand('pauseVideo');
+        }
+
+        window.addEventListener('message', (event) => {
+            if (!heroVideo || event.source !== heroVideo.contentWindow) return;
+            try {
+                const data = JSON.parse(event.data);
+                if (data.event !== 'onStateChange') return;
+                if (data.info === 1) showHeroVideo();
+                if (data.info === 2) {
+                    heroVideoPlaying = false;
+                    if (heroVideoButton) {
+                        heroVideoButton.textContent = '▶';
+                        heroVideoButton.setAttribute('aria-label', 'Phát video');
+                    }
+                }
+            } catch {
+                // Ignore messages that are not YouTube player events.
+            }
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (!heroVideoPlaybackRequested) return;
+            if (document.visibilityState === 'visible' && !heroVideoPlaying) {
+                playHeroVideo();
+            }
+        });
+
         function openInvite() {
             const welcome = document.getElementById('welcome');
+            playHeroVideo();
+
             smokeOpening = true;
             smokeStartTime = performance.now();
             welcome.classList.add('opening');
             setTimeout(() => {
-                // Khi khói gần tan, bắt đầu video vén màn và bật nhạc cưới.
-                const hv = document.getElementById('heroVideo');
-                const hvBtn = document.getElementById('heroVideoBtn');
-                if (hv) {
-                    hv.play().then(() => {
-                        document.getElementById('hero-section')?.classList.add('video-started');
-                        if (hvBtn) hvBtn.classList.add('hidden');
-                    }).catch(() => {
-                        if (hvBtn) hvBtn.classList.remove('hidden');
-                    });
-                }
                 playWeddingMusic().catch(() => { });
             }, 3400);
             setTimeout(() => {
@@ -3695,25 +3812,9 @@
         }
 
         if (tapCoverWrap) {
-            // chạm vào BẤT KỲ đâu trong màn phủ bìa đều mở
-            tapCoverWrap.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
+            tapCoverWrap.addEventListener('click', (event) => {
+                event.stopPropagation();
                 handleTapToOpen();
-            }, { passive: false });
-
-            tapCoverWrap.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleTapToOpen();
-            }, { passive: false });
-
-            // Hỗ trợ phím Enter/Space
-            tapCoverWrap.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleTapToOpen();
-                }
             });
         }
 
@@ -3760,36 +3861,37 @@
         // NÚT TRỞ LÊN ĐẦU TRANG
         const topBtn = document.getElementById('topBtn');
         window.addEventListener('scroll', () => {
-            topBtn.style.display = window.scrollY > 500 ? 'flex' : 'none';
-        });
-        topBtn.onclick = () => {
-            stopAutoScroll();
-            autoScrollActive = false;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(() => {
-                if (typeof AOS !== 'undefined') {
-                    AOS.refreshHard();
+            if (topBtn) topBtn.style.display = window.scrollY > 500 ? 'flex' : 'none';
+        }, { passive: true });
+        if (topBtn) {
+            topBtn.onclick = () => {
+                stopAutoScroll();
+                autoScrollActive = false;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                    if (typeof AOS !== 'undefined') {
+                        AOS.refreshHard();
+                    }
+                }, 700);
+            };
+        }
+
+        if (heroVideoButton) {
+            heroVideoButton.classList.remove('hidden');
+            heroVideoButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                if (heroVideoPlaying) {
+                    pauseHeroVideo();
+                    if (heroVideoButton) {
+                        heroVideoButton.textContent = '▶';
+                        heroVideoButton.setAttribute('aria-label', 'Phát video');
+                    }
+                    return;
                 }
-            }, 700);
-        };
 
-        // Hero video play button logic
-        document.addEventListener('DOMContentLoaded', () => {
-            const hv = document.getElementById('heroVideo');
-            const hvBtn = document.getElementById('heroVideoBtn');
-            if (!hv || !hvBtn) return;
-            hvBtn.classList.add('hidden');
-
-            hvBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                hv.play().then(() => {
-                    document.getElementById('hero-section')?.classList.add('video-started');
-                    hvBtn.classList.add('hidden');
-                }).catch(() => {
-                    // cannot play
-                });
+                playHeroVideo();
             });
-        });
+        }
 
         // (heart editor removed)
 
@@ -4040,6 +4142,19 @@
                 thankYouModal.style.display = 'none';
             }
         }
+
+        window.customOpenModal = customOpenModal;
+        window.customCloseModal = customCloseModal;
+        window.closeModalOutside = closeModalOutside;
+        window.toggleAttendanceDetails = toggleAttendanceDetails;
+        window.submitRSVP = submitRSVP;
+        window.showCelebration = showCelebration;
+        window.closeThankYouModal = closeThankYouModal;
+        window.showQRModal = showQRModal;
+        window.showQRModal2 = showQRModal2;
+        window.closeQRModal = closeQRModal;
+        window.closeQRModal2 = closeQRModal2;
+        }, { once: true });
     </script>
 
     <!-- Thank You Modal -->

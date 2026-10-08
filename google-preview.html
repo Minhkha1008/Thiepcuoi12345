@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trang xem nội dung</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #fffaf5;
+      --panel: #ffffff;
+      --text: #2f241d;
+      --muted: #7a6555;
+      --accent: #b86c4d;
+      --accent-2: #f0b17a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, var(--bg), #ffe9d8);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      width: min(480px, 100%);
+      background: var(--panel);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+      border: 1px solid rgba(184,108,77,0.16);
+      text-align: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #fff1e6;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 1.35rem;
+    }
+    p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      border: 0;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(184,108,77,0.22);
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .tiny {
+      margin-top: 12px;
+      font-size: 0.9rem;
+      color: #9a806f;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">🔎 Nội dung đang được mở</div>
+    <h1>Trang này sẽ mở ở tab mới</h1>
+    <p>Google không cho phép nhúng trực tiếp vào khung này, nên nội dung sẽ được mở ở tab mới để bạn xem được bình thường.</p>
+    <a id="openLinkBtn" class="btn" href="#" target="_blank" rel="noopener noreferrer">Mở trang ngay</a>
+    <div class="tiny" id="targetLabel">Đang chuẩn bị...</div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const target = params.get('target') || 'https://www.google.com';
+    const btn = document.getElementById('openLinkBtn');
+    const label = document.getElementById('targetLabel');
+
+    btn.href = target;
+    label.textContent = 'Địa chỉ: ' + target;
+    window.open(target, '_blank', 'noopener,noreferrer');
+  </script>
+</body>
+</html>

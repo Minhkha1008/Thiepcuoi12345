@@ -1,9 +1,4 @@
 <?php
-// Laragon defaults: MySQL on localhost, user root, empty password.
-const DB_HOST = '127.0.0.1';
-const DB_NAME = 'wedding_invitation';
-const DB_USER = 'root';
-const DB_PASSWORD = '';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
@@ -25,55 +20,18 @@ function respond(array $payload, int $status = 200): void
 $pdo = null;
 
 try {
-    $serverPdo = new PDO(
-        'mysql:host=' . DB_HOST . ';charset=utf8mb4',
-        DB_USER,
-        DB_PASSWORD,
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-    );
-    $serverPdo->exec(
-        'CREATE DATABASE IF NOT EXISTS `' . DB_NAME . '` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
-    );
-
+    $dbConfig = require __DIR__ . '/db-config.php';
     $pdo = new PDO(
-        'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4',
-        DB_USER,
-        DB_PASSWORD,
+        'mysql:host=' . $dbConfig['host'] . ';dbname=' . $dbConfig['database'] . ';charset=utf8mb4',
+        $dbConfig['username'],
+        $dbConfig['password'],
         [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
         ]
     );
-    $pdo->exec(
-        "CREATE TABLE IF NOT EXISTS guest_comments (
-            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(100) NOT NULL,
-            message VARCHAR(1000) NOT NULL,
-            side VARCHAR(10) NOT NULL DEFAULT 'groom',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        ) ENGINE=InnoDB"
-    );
-    $sideColumn = $pdo->query(
-        "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
-         WHERE TABLE_SCHEMA = " . $pdo->quote(DB_NAME) . "
-         AND TABLE_NAME = 'guest_comments' AND COLUMN_NAME = 'side'"
-    )->fetchColumn();
-    if (!$sideColumn) {
-        $pdo->exec("ALTER TABLE guest_comments ADD COLUMN side VARCHAR(10) NOT NULL DEFAULT 'groom'");
-    }
-    $pdo->exec(
-        'CREATE TABLE IF NOT EXISTS rsvps (
-            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(100) NOT NULL,
-            relationship VARCHAR(40) NOT NULL,
-            attendance VARCHAR(20) NOT NULL,
-            guest_count TINYINT UNSIGNED NOT NULL DEFAULT 0,
-            wishes VARCHAR(1000) NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        ) ENGINE=InnoDB'
-    );
 } catch (Throwable $error) {
-    respond(['error' => 'Không thể kết nối cơ sở dữ liệu. Kiểm tra MySQL trong Laragon.'], 500);
+    respond(['error' => 'Không thể kết nối cơ sở dữ liệu. Kiểm tra thông tin trong db-config.php và database đã được tạo trên hosting.'], 500);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {

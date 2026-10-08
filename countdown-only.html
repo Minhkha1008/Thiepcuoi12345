@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đếm ngược ngày hạnh phúc</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#0b0710;
+      --bg1:#10080d;
+      --primary-dark:#1e1e1e;
+      --accent-gold:#c5a86a;
+      --accent-gold-hover:#b39556;
+      --text-muted:#e7e0d3;
+      --font-serif:'Playfair Display', serif;
+      --font-sans:'Montserrat', sans-serif;
+    }
+
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family:var(--font-sans);
+      overflow-x:hidden;
+      background:
+        radial-gradient(900px 500px at 50% 20%, rgba(197,168,106,.22) 0%, rgba(197,168,106,0) 55%),
+        radial-gradient(700px 420px at 20% 80%, rgba(255,182,221,.10) 0%, rgba(255,182,221,0) 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg0));
+      color:#fff;
+    }
+
+    .wrap{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:24px 14px;
+      gap:18px;
+      text-align:center;
+      position:relative;
+    }
+
+    .back-btn{
+      position:absolute;
+      top:20px;
+      left:20px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 16px;
+      border-radius:999px;
+      background: rgba(255,255,255,0.12);
+      color:#fff;
+      text-decoration:none;
+      border:1px solid rgba(197,168,106,0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      font-size:0.95rem;
+      font-weight:600;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .back-btn:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.2);
+    }
+
+    .title{
+      font-family:var(--font-serif);
+      font-size: clamp(1.4rem, 4.5vw, 2.5rem);
+      letter-spacing: .04em;
+      margin:0;
+      font-weight:600;
+      text-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    .sub{
+      margin-top:-6px;
+      font-size: clamp(.95rem, 3.4vw, 1.05rem);
+      color: rgba(255,255,255,.75);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .divider{
+      width: 84px;
+      height: 1px;
+      background: rgba(197,168,106,.95);
+      margin: 10px auto 4px;
+      box-shadow: 0 0 18px rgba(197,168,106,.35);
+    }
+
+    .countdown-box{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:center;
+      align-items:stretch;
+      width: min(520px, 100%);
+      margin-top: 8px;
+    }
+
+    .countdown-item{
+      width: 92px;
+      height: 104px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(197,168,106,.22);
+      border-radius: 18px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      position:relative;
+      overflow:hidden;
+      box-shadow: 0 18px 50px rgba(0,0,0,.28);
+    }
+
+    .countdown-item::before{
+      content:"";
+      position:absolute;
+      inset:-45% -55%;
+      background: linear-gradient(110deg, transparent 0%, rgba(197,168,106,.25) 35%, rgba(255,255,255,.32) 50%, rgba(197,168,106,.20) 65%, transparent 100%);
+      transform: translateX(-35%) rotate(10deg);
+      opacity:0;
+      pointer-events:none;
+    }
+
+    .countdown-item.pop{ animation: countdownPop 320ms ease-out; }
+    .countdown-item.pop::before{ opacity:1; animation: countdownShine 720ms ease-out forwards; }
+
+    @keyframes countdownPop{0%{transform:scale(1)}50%{transform:scale(1.07)}100%{transform:scale(1)}}
+    @keyframes countdownShine{0%{transform:translateX(-55%) rotate(10deg)}100%{transform:translateX(55%) rotate(10deg); opacity:0}}
+
+    .countdown-item span{
+      font-size: 2.1rem;
+      font-family: var(--font-serif);
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: .02em;
+      text-shadow: 0 10px 30px rgba(0,0,0,.35);
+      position:relative;
+      z-index:1;
+    }
+
+    .countdown-item small{
+      font-size: .78rem;
+      color: rgba(255,255,255,.72);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-weight: 700;
+      margin-top: 4px;
+      position:relative;
+      z-index:1;
+    }
+
+    @media (max-width: 420px){
+      .countdown-item{width: 76px; height: 86px; border-radius:14px;}
+      .countdown-item span{font-size: 1.6rem;}
+      .countdown-item small{font-size:.68rem;}
+    }
+
+    /* Optional: subtle gold pulse */
+    .countdown-box{ position:relative; }
+    .countdown-box::after{
+      content:"";
+      position:absolute;
+      inset:-18px;
+      border-radius: 26px;
+      background: radial-gradient(closest-side, rgba(197,168,106,.18), transparent 70%);
+      filter: blur(2px);
+      opacity:.6;
+      animation: halo 3.2s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes halo{0%,100%{transform:scale(1); opacity:.45}50%{transform:scale(1.02); opacity:.65}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <a href="index.html" class="back-btn" aria-label="Quay lại trang trước">← Quay lại</a>
+
+    <!-- Giống “video mẫu” hơn: chạy background + container sáng như trong index -->
+    <div class="wedding-time-section" aria-live="polite">
+      <h1 class="title">Thời Gian Lễ Cưới</h1>
+      <div class="divider"></div>
+      <div class="sub">Đếm ngược ngày hạnh phúc</div>
+
+      <div class="countdown-box" id="countdownContainer">
+        <div class="countdown-item"><div><span id="days">00</span></div><small>Ngày</small></div>
+        <div class="countdown-item"><div><span id="hours">00</span></div><small>Giờ</small></div>
+        <div class="countdown-item"><div><span id="minutes">00</span></div><small>Phút</small></div>
+        <div class="countdown-item"><div><span id="seconds">00</span></div><small>Giây</small></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Countdown tới ngày cưới (giữ nguyên logic từ index.html)
+    const target = new Date("2026-11-07T08:00:00").getTime();
+
+    function tick(){
+      const d = target - Date.now();
+      if (d <= 0) {
+        clearInterval(interval);
+        document.getElementById('countdownContainer').innerHTML = 
+          "<div style='width:100%; text-align:center; padding: 18px 10px; font-family: var(--font-serif); color: rgba(197,168,106,.95); font-weight:700; font-size:1.3rem;'>Lễ cưới đã diễn ra!</div>";
+        return;
+      }
+
+      const days = String(Math.floor(d / 86400000)).padStart(2,'0');
+      const hours = String(Math.floor((d % 86400000) / 3600000)).padStart(2,'0');
+      const minutes = String(Math.floor((d % 3600000) / 60000)).padStart(2,'0');
+      const seconds = String(Math.floor((d % 60000) / 1000)).padStart(2,'0');
+
+      document.getElementById('days').innerText = days;
+      document.getElementById('hours').innerText = hours;
+      document.getElementById('minutes').innerText = minutes;
+      document.getElementById('seconds').innerText = seconds;
+
+      const container = document.getElementById('countdownContainer');
+      const items = container.querySelectorAll('.countdown-item');
+      items.forEach(it => {
+        it.classList.remove('pop');
+        void it.offsetWidth; // reflow
+        it.classList.add('pop');
+        setTimeout(() => it.classList.remove('pop'), 360);
+      });
+    }
+
+    tick();
+    const interval = setInterval(tick, 1000);
+  </script>
+</body>
+</html>
+
