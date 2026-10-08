@@ -639,9 +639,9 @@ scene.add(planet);
 
 // ---- TẠO CÁC VÒNG CHỮ QUAY QUANH HÀNH TINH ----
 const ringTexts = [
-  'HAPPY BOYS DAY',
-  "TM12A WITH LOVE - MÃI MỘT TÌNH IU",
-  "DUIZMENHH",
+  'HAPPY Wedding',
+  " A LOVE THAT LASTS FOREVER - MÃI MÃI MỘT TÌNH IU",
+  "Be Nho & Nhut Huynh",
   ...(window.dataCCD && window.dataCCD.data.ringTexts ? window.dataCCD.data.ringTexts : [])
 ];
 
