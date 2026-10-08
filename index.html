@@ -2910,6 +2910,25 @@
     <!-- AOS Animation JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
+    <!-- Firebase Analytics -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5xLPSSysns0Sx_DD0R8lwHxQmhixsD84",
+            authDomain: "thiepcuoionline-8bde5.firebaseapp.com",
+            projectId: "thiepcuoionline-8bde5",
+            storageBucket: "thiepcuoionline-8bde5.firebasestorage.app",
+            messagingSenderId: "193743296655",
+            appId: "1:193743296655:web:5736fbc80f6137220f38fa",
+            measurementId: "G-8B09VJXVQP"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
         if (window.AOS) {
