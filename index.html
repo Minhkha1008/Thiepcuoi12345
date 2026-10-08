@@ -2910,10 +2910,11 @@
     <!-- AOS Animation JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-    <!-- Firebase Analytics -->
+    <!-- Firebase Analytics and Firestore -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyC5xLPSSysns0Sx_DD0R8lwHxQmhixsD84",
@@ -2927,6 +2928,16 @@
 
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+        window.weddingFirebase = {
+            app,
+            analytics,
+            db,
+            addDoc,
+            collection,
+            getDocs,
+            serverTimestamp
+        };
     </script>
 
     <script>
@@ -3041,7 +3052,7 @@
             }
         }
 
-        // Hàm gửi dữ liệu phản hồi
+        // Hàm gửi dữ liệu phản hồi sang Firestore
         async function submitRSVP(event) {
             event.preventDefault();
             const form = document.getElementById('weddingForm');
@@ -3050,25 +3061,26 @@
             const guestCount = attendance === 'no' ? 0 : Number(document.getElementById('guestCount').value);
 
             try {
-                const response = await fetch('comments.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'rsvp',
-                        name,
-                        relationship: document.getElementById('relationship').value,
-                        attendance,
-                        guest_count: guestCount,
-                        wishes: document.getElementById('wishes').value.trim()
-                    })
+                const { db, addDoc, collection, serverTimestamp } = window.weddingFirebase;
+                if (!db || !addDoc || !collection || !serverTimestamp) {
+                    throw new Error('Firebase Firestore chưa được khởi tạo.');
+                }
+
+                await addDoc(collection(db, 'rsvps'), {
+                    name,
+                    relationship: document.getElementById('relationship').value,
+                    attendance,
+                    guest_count: guestCount,
+                    wishes: document.getElementById('wishes').value.trim(),
+                    created_at: serverTimestamp()
                 });
-                if (!response.ok) throw new Error('RSVP request failed');
+
                 alert(`Cảm ơn bạn ${name} đã gửi phản hồi xác nhận tham dự đám cưới thành công!`);
                 customCloseModal();
                 form.reset();
                 toggleAttendanceDetails('yes_alone');
             } catch (error) {
-                alert('Chưa thể lưu phản hồi. Vui lòng mở trang bằng Laragon rồi thử lại.');
+                alert(`Chưa thể lưu phản hồi. ${error.message || 'Vui lòng thử lại sau.'}`);
             }
         }
 
@@ -3121,10 +3133,15 @@
 
         async function loadComments() {
             try {
-                const response = await fetch('comments.php?action=list', { cache: 'no-store' });
-                if (!response.ok) throw new Error('Comments request failed');
-                const data = await response.json();
-                const comments = data.comments || [];
+                const { db, collection, getDocs } = window.weddingFirebase;
+                if (!db || !collection || !getDocs) {
+                    throw new Error('Firebase Firestore chưa được khởi tạo.');
+                }
+
+                const snapshot = await getDocs(collection(db, 'guest_comments'));
+                const comments = snapshot.docs
+                    .map(doc => ({ id: doc.id, ...doc.data() }))
+                    .sort((a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0));
                 const newComments = comments.filter(comment => !knownCommentIds.has(String(comment.id)));
                 const wasAtBottom = isCommentsAtBottom();
                 knownCommentIds = new Set(comments.map(comment => String(comment.id)));
@@ -3139,7 +3156,8 @@
                 hasLoadedComments = true;
                 updateNewestCommentsButton();
             } catch (error) {
-                commentStatus.textContent = 'Lời chúc sẽ hiển thị sau khi máy chủ được kết nối.';
+                commentStatus.textContent = 'Không thể tải lời chúc. Hãy kiểm tra cấu hình Firestore và quyền truy cập.';
+                console.error(error);
             }
         }
 
@@ -3159,23 +3177,25 @@
                 localStorage.setItem(commentNameKey, name);
 
                 try {
-                    const response = await fetch('comments.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'comment', name, side, message })
-                    });
-                    const result = await response.json().catch(() => null);
-                    if (!response.ok) {
-                        throw new Error(result?.error || `Máy chủ trả về lỗi HTTP ${response.status}.`);
+                    const { db, addDoc, collection, serverTimestamp } = window.weddingFirebase;
+                    if (!db || !addDoc || !collection || !serverTimestamp) {
+                        throw new Error('Firebase Firestore chưa được khởi tạo.');
                     }
+
+                    await addDoc(collection(db, 'guest_comments'), {
+                        name,
+                        message,
+                        side,
+                        created_at: serverTimestamp()
+                    });
+
                     document.getElementById('commentMessage').value = '';
-                    commentStatus.textContent = 'Lời chúc của bạn đã được gửi.';
+                    commentStatus.textContent = 'Lời chúc của bạn đã được gửi lên Firestore.';
                     pendingCommentCount = 0;
-                    loadComments();
+                    await loadComments();
                 } catch (error) {
-                    commentStatus.textContent = error instanceof TypeError
-                        ? 'Không kết nối được comments.php. Kiểm tra đường dẫn trang và PHP trên hosting.'
-                        : error.message || 'Chưa thể gửi lời chúc. Vui lòng thử lại sau.';
+                    commentStatus.textContent = error.message || 'Chưa thể gửi lời chúc. Vui lòng thử lại sau.';
+                    console.error(error);
                 }
             });
             commentsList.addEventListener('scroll', () => {
